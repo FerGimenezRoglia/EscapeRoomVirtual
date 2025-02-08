@@ -1,7 +1,6 @@
-# Escape Room Virtual
+# DatabaseConnection 
 
-## 1. Descripción del Proyecto
-- Este proyecto es un sistema de gestión para un Escape Room Virtual desarrollado en **Java** con **MySQL** como base de datos. Se implementó un diseño modular para garantizar la escalabilidad y el mantenimiento del código.
+## 1. Descripción del documento
 - Actualmente, el sistema permite la conexión con MySQL, el manejo de excepciones personalizadas y la gestión de logs mediante Log4J. Se sigue una estructura organizada donde cada componente cumple una responsabilidad específica.
 
 ---
