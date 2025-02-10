@@ -1,6 +1,6 @@
 package config;
 
-import exceptions.DatabaseException;
+import exceptions.DataAccessException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class DatabaseConnection {
 
         } catch (ClassNotFoundException | SQLException e) {
             logger.error("Error al conectar con la base de datos.", e);
-            throw new DatabaseException("Error al conectar con la base de datos.", e);
+            throw new DataAccessException("Error al conectar con la base de datos.", e);
         }
     }
 
@@ -65,7 +65,7 @@ public class DatabaseConnection {
                 }
             } catch (SQLException e) {
                 logger.error("Error al cerrar la conexión.", e);
-                throw new DatabaseException("Error al cerrar la conexión.", e);
+                throw new DataAccessException("Error al cerrar la conexión.", e);
             }
         }
     }
@@ -77,10 +77,10 @@ public class DatabaseConnection {
         // Verificar si la conexión está activa
         try {
             if (connection == null || connection.isClosed()) {
-                throw new DatabaseException("No se puede ejecutar el esquema SQL porque la conexión está cerrada.");
+                throw new DataAccessException("No se puede ejecutar el esquema SQL porque la conexión está cerrada.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Error al verificar el estado de la conexión.", e);
+            throw new DataAccessException("Error al verificar el estado de la conexión.", e);
         }
 
         try (Statement stmt = connection.createStatement();
@@ -121,7 +121,7 @@ public class DatabaseConnection {
 
             logger.info("Base de datos y esquema SQL ejecutados correctamente.");
         } catch (IOException | SQLException e) {
-            throw new DatabaseException("Error al ejecutar el esquema SQL.", e);
+            throw new DataAccessException("Error al ejecutar el esquema SQL.", e);
         }
     }
 }

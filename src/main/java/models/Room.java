@@ -1,59 +1,61 @@
 package models;
 
+import java.sql.Timestamp;
+
 public class Room {
 
-    private int id;
-    private int escapeRoomId;
-    private String name;
-    private String difficultyLevel;
-    private double price;
+    public enum DifficultyLevel { EASY, MEDIUM, HARD }
 
-    public Room() {
+    private int id;
+    private Integer escapeRoomId; // Puede ser null según la BD
+    private String name;
+    private DifficultyLevel difficultyLevel;
+    private double price;
+    private Timestamp createdAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+    private Timestamp updatedAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+
+    // Constructor vacío
+    public Room() {}
+
+    // Constructor con todos los atributos
+    public Room(int id, Integer escapeRoomId, String name, DifficultyLevel difficultyLevel, double price, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.escapeRoomId = escapeRoomId;
+        this.name = name;
+        this.difficultyLevel = difficultyLevel;
+        this.price = price;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public Room(int id, int escapeRoomId, String name, String difficultyLevel, double price) {
-        this.id = id;
+    // Constructor para nuevos registros (sin ID ni timestamps)
+    public Room(Integer escapeRoomId, String name, DifficultyLevel difficultyLevel, double price) {
         this.escapeRoomId = escapeRoomId;
         this.name = name;
         this.difficultyLevel = difficultyLevel;
         this.price = price;
     }
 
-    public int getId() {
-        return id;
-    }
+    // Getters
+    public int getId() { return id; }
+    public Integer getEscapeRoomId() { return escapeRoomId; }
+    public String getName() { return name; }
+    public DifficultyLevel getDifficultyLevel() { return difficultyLevel; }
+    public double getPrice() { return price; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public Timestamp getUpdatedAt() { return updatedAt; }
 
-    public int getEscapeRoomId() {
-        return escapeRoomId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDifficultyLevel() {
-        return difficultyLevel;
-    }
-
-    public void setDifficultyLevel(String difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    // Setters
+    public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; }
+    public void setName(String name) { this.name = name; }
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) { this.difficultyLevel = difficultyLevel; }
+    public void setPrice(double price) { this.price = price; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString() {
-        return String.format("Room: id = %d | escapeRoomId = %d | name = '%s' | difficultyLevel = '%s' | price = %.2f €",
-                id, escapeRoomId, name, difficultyLevel, price);
+        return String.format("Room: ID = %d | EscapeRoomID = %s | Name = '%s' | Difficulty = %s | Price = %.2f€ | Created At = %s | Updated At = %s",
+                id, escapeRoomId != null ? escapeRoomId : "NULL", name, difficultyLevel, price, createdAt, updatedAt);
     }
 }
