@@ -8,8 +8,8 @@ public class Client {
     private String name;
     private String email;
     private boolean isSubscribed;
-    private Timestamp createdAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
-    private Timestamp updatedAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructor vacío
     public Client() {

@@ -1,11 +1,20 @@
 import config.DatabaseConnection;
 import exceptions.DataAccessException;
+
 import models.Client;
+import models.Ticket;
+import models.Decoration;
+import models.RoomClient;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import repositories.ClientRepository;
-import java.util.List;
 
+import repositories.ClientRepository;
+import repositories.TicketRepository;
+import repositories.DecorationRepository;
+import repositories.RoomClientRepository;
+
+import java.util.List;
 
 public class App {
     private static final Logger logger = LogManager.getLogger(App.class);
@@ -31,6 +40,7 @@ public class App {
 
             // Prueba del método add
             try {
+                // Prueba del método add para Client
                 ClientRepository clientRepository = new ClientRepository(dbConnection.getConnection());
 
                 // Crear un nuevo cliente
@@ -45,9 +55,8 @@ public class App {
                 } else {
                     logger.warn("No se pudo obtener el ID del cliente insertado.");
                 }
-
             } catch (DataAccessException e) {
-                logger.error("Error al insertar cliente: {}", e.getMessage());
+                logger.error("Error al insertar cliente o ticket: {}", e.getMessage());
             }
 
             // Prueba del método getById
@@ -158,7 +167,6 @@ public class App {
             } catch (DataAccessException e) {
                 logger.error("Error al eliminar cliente: {}", e.getMessage());
             }
-
             //!------------FIN DE LAS PRUEBAS----------//
 
         } else {

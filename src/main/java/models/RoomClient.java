@@ -22,10 +22,6 @@ public class RoomClient {
         this.completed = completed;
     }
 
-    //!-------- NO es redundante tener los dos constructores en RoomClient.
-    //! Cada uno cumple un propósito específico en la estructura de datos y el flujo del repositorio
-    //! --------//
-
     // Constructor para nuevos registros (sin timestamps ni endTime)
     public RoomClient(int clientId, int roomId) {
         this.clientId = clientId;
@@ -41,6 +37,9 @@ public class RoomClient {
     public boolean isCompleted() { return completed; }
 
     // Setters
+
+    public void setClientId(int clientId) {this.clientId = clientId;}
+    public void setRoomId(int roomId) {this.roomId = roomId;}
     public void setStartTime(Timestamp startTime) { this.startTime = startTime; }
     public void setEndTime(Timestamp endTime) { this.endTime = endTime; }
     public void setCompleted(boolean completed) { this.completed = completed; }

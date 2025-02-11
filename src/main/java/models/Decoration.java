@@ -41,6 +41,8 @@ public class Decoration {
     public Timestamp getCreatedAt() { return createdAt; }
 
     // Setters
+
+    public void setId(int id) {this.id = id;}
     public void setRoomId(int roomId) { this.roomId = roomId; }
     public void setName(String name) { this.name = name; }
     public void setMaterial(String material) { this.material = material; }
