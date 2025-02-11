@@ -44,7 +44,7 @@ public class ClientRepository implements Repository<Client> {
             // Ejecutar la consulta y verificar si se insertó correctamente.
             // executeUpdate() devuelve el número de filas afectadas.
             if (statement.executeUpdate() == 0) {
-                // Si no se afectó ninguna fila, lanzar una excepción.
+                // Si se afectó fila, lanzar una excepción.
                 throw new DataAccessException("No se pudo insertar el cliente.");
             }
 

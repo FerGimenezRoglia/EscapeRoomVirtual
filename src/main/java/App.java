@@ -47,6 +47,7 @@ public class App {
                 logger.error("Error al insertar cliente: {}", e.getMessage());
             }
 
+
             // Prueba del método getById
             try {
                 ClientRepository clientRepository = new ClientRepository(dbConnection.getConnection());
