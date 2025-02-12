@@ -46,6 +46,7 @@ public class Room {
     public Timestamp getUpdatedAt() { return updatedAt; }
 
     // Setters
+    public void setId(int id) { this.id = id; }
     public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; }
     public void setName(String name) { this.name = name; }
     public void setDifficultyLevel(DifficultyLevel difficultyLevel) { this.difficultyLevel = difficultyLevel; }
