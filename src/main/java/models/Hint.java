@@ -37,6 +37,7 @@ public class Hint {
     public Timestamp getCreatedAt() { return createdAt; }
 
     // Setters
+    public void setId(int id) { this.id = id; }
     public void setRoomId(int roomId) { this.roomId = roomId; }
     public void setDescription(String description) { this.description = description; }
     public void setPrice(double price) { this.price = price; }
@@ -47,4 +48,6 @@ public class Hint {
         return String.format("Hint: ID = %d | RoomID = %d | Description = '%s' | Price = %.2f€ | Created At = %s",
                 id, roomId, description, price, createdAt);
     }
+
+
 }

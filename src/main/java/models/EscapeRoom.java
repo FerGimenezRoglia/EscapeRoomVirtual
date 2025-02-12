@@ -32,6 +32,7 @@ public class EscapeRoom {
     public Timestamp getUpdatedAt() { return updatedAt; }
 
     // Setters
+    public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
