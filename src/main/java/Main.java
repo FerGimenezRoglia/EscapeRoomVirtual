@@ -8,13 +8,13 @@ public class Main {
         //App app = new App();
         //app.run();
 
-        /*try (Connection connection = DatabaseConnection.getInstance().getConnection()) {
+       try (Connection connection = DatabaseConnection.getInstance().getConnection()) {
             TestSuite testSuite = new TestSuite(connection);
             testSuite.runTests();
         } catch (Exception e) {
             System.err.println("❌ Error en la prueba: " + e.getMessage());
             e.printStackTrace();
-        }*/
+        }
 
     }
 }
