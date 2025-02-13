@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EscapeRoomRepository implements Repository<EscapeRoom> {
+
     private final Connection connection;
+
+    private static final String INSERT_ESCAPE_ROOM = "INSERT INTO escape_room (name) VALUES (?)";
+    private static final String FETCH_CREATED_UPDATED = "SELECT created_at, updated_at FROM escape_room WHERE id = ?";
+    private static final String SELECT_ESCAPE_ROOM_BY_ID = "SELECT * FROM escape_room WHERE id = ?";
+    private static final String SELECT_ALL_ESCAPE_ROOMS = "SELECT * FROM escape_room";
+    private static final String UPDATE_ESCAPE_ROOM = "UPDATE escape_room SET name = ? WHERE id = ?";
+    private static final String DELETE_ESCAPE_ROOM = "DELETE FROM escape_room WHERE id = ?";
 
     public EscapeRoomRepository(Connection connection) {
         this.connection = connection;
@@ -24,9 +32,8 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public void add(EscapeRoom escapeRoom) throws DataAccessException {
-        String sql = "INSERT INTO escape_room (name) VALUES (?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_ESCAPE_ROOM, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, escapeRoom.getName());
 
             if (statement.executeUpdate() == 0) {
@@ -36,10 +43,7 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 if (keys.next()) {
                     escapeRoom.setId(keys.getInt(1));
-
-                    // Nueva consulta para recuperar created_at y updated_at
-                    String fetchSql = "SELECT created_at, updated_at FROM escape_room WHERE id = ?";
-                    try (PreparedStatement fetchStatement = connection.prepareStatement(fetchSql)) {
+                    try (PreparedStatement fetchStatement = connection.prepareStatement(FETCH_CREATED_UPDATED)) {
                         fetchStatement.setInt(1, escapeRoom.getId());
                         try (ResultSet rs = fetchStatement.executeQuery()) {
                             if (rs.next()) {
@@ -59,11 +63,8 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public EscapeRoom getById(int id) throws DataAccessException {
-        String sql = "SELECT * FROM escape_room WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ESCAPE_ROOM_BY_ID)) {
             statement.setInt(1, id);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return mapResultSet(resultSet);
@@ -78,9 +79,7 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public List<EscapeRoom> getAll() throws DataAccessException {
-        String sql = "SELECT * FROM escape_room";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ESCAPE_ROOMS);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<EscapeRoom> escapeRooms = new ArrayList<>();
@@ -95,12 +94,9 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public void update(EscapeRoom escapeRoom) throws DataAccessException {
-        String sql = "UPDATE escape_room SET name = ? WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_ESCAPE_ROOM)) {
             statement.setString(1, escapeRoom.getName());
             statement.setInt(2, escapeRoom.getId());
-
             if (statement.executeUpdate() == 0) {
                 throw new DataAccessException("No se encontró la Escape Room con ID " + escapeRoom.getId());
             }
@@ -111,11 +107,8 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public void delete(int id) throws DataAccessException {
-        String sql = "DELETE FROM escape_room WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_ESCAPE_ROOM)) {
             statement.setInt(1, id);
-
             if (statement.executeUpdate() == 0) {
                 throw new DataAccessException("No se encontró la Escape Room con ID " + id);
             }
@@ -124,3 +117,5 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
         }
     }
 }
+
+
