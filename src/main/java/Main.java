@@ -1,22 +1,19 @@
-import config.DatabaseConnection;
-
-import java.sql.Connection;
+import config.AppInitializer;
+import view.GestionMenu;
 
 public class Main {
     public static void main(String[] args) {
+        // Inicializar la aplicación
+        AppInitializer initializer = new AppInitializer();
 
-        //App app = new App();
-        //app.run();
+        // Ejecutar el esquema SQL para asegurar que la base de datos esté lista
+        initializer.ejecutarSchema();
 
-       try (Connection connection = DatabaseConnection.getInstance().getConnection()) {
-            TestSuite testSuite = new TestSuite(connection);
-            testSuite.runTests();
-        } catch (Exception e) {
-            System.err.println("❌ Error en la prueba: " + e.getMessage());
-            e.printStackTrace();
-        }
+        // Crear e iniciar el menú
+        GestionMenu menu = new GestionMenu(initializer.getOperaciones());
+        menu.mostrarMenu();
 
+        // Cerrar la conexión a la base de datos
+        initializer.close();
     }
 }
-
-

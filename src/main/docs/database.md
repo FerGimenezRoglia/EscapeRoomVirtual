@@ -20,11 +20,11 @@
 
 ---
 
-## 4. Implementación de `App` y `Main`
+## 4. Implementación de `Test.App` y `Main`
 
-- Para estructurar mejor el flujo de ejecución, se desarrollaron dos clases principales: **`App`** y **`Main`**.
-- La clase **`App`** es la encargada de orquestar el funcionamiento de la aplicación. Su principal responsabilidad es ejecutar la conexión a la base de datos y verificar que esta se establezca correctamente. Se diseñó un método llamado `testConexion()` que permite realizar una prueba rápida de la conexión a MySQL, asegurando que se pueda interactuar con la base de datos antes de continuar con el desarrollo del sistema.
-- Por otro lado, la clase **`Main`** es el punto de entrada del programa. Su única función es instanciar `App` y ejecutar `run()`, manteniendo el principio de separación de responsabilidades y evitando agregar lógica en el método `main()`. Esto asegura que `Main` solo actúe como iniciador de la aplicación, mientras que `App` maneja el flujo real de ejecución.
+- Para estructurar mejor el flujo de ejecución, se desarrollaron dos clases principales: **`Test.App`** y **`Main`**.
+- La clase **`Test.App`** es la encargada de orquestar el funcionamiento de la aplicación. Su principal responsabilidad es ejecutar la conexión a la base de datos y verificar que esta se establezca correctamente. Se diseñó un método llamado `testConexion()` que permite realizar una prueba rápida de la conexión a MySQL, asegurando que se pueda interactuar con la base de datos antes de continuar con el desarrollo del sistema.
+- Por otro lado, la clase **`Main`** es el punto de entrada del programa. Su única función es instanciar `Test.App` y ejecutar `run()`, manteniendo el principio de separación de responsabilidades y evitando agregar lógica en el método `main()`. Esto asegura que `Main` solo actúe como iniciador de la aplicación, mientras que `Test.App` maneja el flujo real de ejecución.
 
 ---
 
@@ -42,7 +42,7 @@ Después de la implementación de estas mejoras, se logró:
 
 1. **Conexión estable con MySQL**, garantizada mediante el patrón Singleton.
 2. **Manejo centralizado de excepciones** para identificar problemas en la base de datos.
-3. **Estructura clara de ejecución**, separando la lógica en `App` y manteniendo `Main` solo como punto de entrada.
+3. **Estructura clara de ejecución**, separando la lógica en `Test.App` y manteniendo `Main` solo como punto de entrada.
 4. **Registro de eventos con Log4J 2**, eliminando la dependencia de `System.out.println()`.
 5. **Verificación manual de la base de datos**, asegurando que `escape_room_db` estuviera correctamente creada y accesible desde Java.
 
