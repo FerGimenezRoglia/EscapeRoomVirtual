@@ -8,14 +8,19 @@ public interface Repository<T> {
     void add(T entity) throws DataAccessException;
     List<T> getAll() throws DataAccessException;
     void update(T entity) throws DataAccessException;
-    void delete(int id) throws DataAccessException;
 
-    // ✅ getById ya maneja internamente si debe lanzarse una excepción
+    default void delete(int id) throws DataAccessException {
+        throw new UnsupportedOperationException("Este repositorio no usa claves simples. Usa delete(id1, id2).");
+    }
+
+    default void delete(int id1, int id2) throws DataAccessException {
+        throw new UnsupportedOperationException("Este repositorio no usa claves compuestas.");
+    }
+
     default T getById(int id) throws DataAccessException {
         throw new UnsupportedOperationException("Este repositorio no usa claves simples. Usa getByIds().");
     }
 
-    // 🔹 Método para claves compuestas
     default T getByIds(int id1, int id2) throws DataAccessException {
         throw new UnsupportedOperationException("Este repositorio no usa claves compuestas.");
     }

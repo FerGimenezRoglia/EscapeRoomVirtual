@@ -98,11 +98,6 @@ public class RoomClientRepository implements Repository<RoomClient> {
         }
     }
 
-    @Override
-    public void delete(int id) throws DataAccessException {
-        throw new UnsupportedOperationException("Debe llamar a delete con clientId y roomId");
-    }
-
     public void delete(int clientId, int roomId) throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_ROOM_CLIENT)) {
             statement.setInt(1, clientId);
