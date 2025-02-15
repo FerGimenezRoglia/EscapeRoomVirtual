@@ -9,6 +9,12 @@ import java.util.List;
 public class RoomClientRepository implements Repository<RoomClient> {
     private final Connection connection;
 
+    private static final String INSERT_ROOM_CLIENT = "INSERT INTO room_client (client_id, room_id, start_time, end_time, completed) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_ROOM_CLIENT_BY_IDS = "SELECT * FROM room_client WHERE client_id = ? AND room_id = ?";
+    private static final String SELECT_ALL_ROOM_CLIENTS = "SELECT * FROM room_client";
+    private static final String UPDATE_ROOM_CLIENT = "UPDATE room_client SET start_time = ?, end_time = ?, completed = ? WHERE client_id = ? AND room_id = ?";
+    private static final String DELETE_ROOM_CLIENT = "DELETE FROM room_client WHERE client_id = ? AND room_id = ?";
+
     public RoomClientRepository(Connection connection) {
         this.connection = connection;
     }
@@ -23,12 +29,9 @@ public class RoomClientRepository implements Repository<RoomClient> {
         );
     }
 
-    // --------------------- CREATE ---------------------
     @Override
     public void add(RoomClient roomClient) throws DataAccessException {
-        String sql = "INSERT INTO room_client (client_id, room_id, start_time, end_time, completed) VALUES (?, ?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_ROOM_CLIENT)) {
             statement.setInt(1, roomClient.getClientId());
             statement.setInt(2, roomClient.getRoomId());
             statement.setTimestamp(3, roomClient.getStartTime());
@@ -38,46 +41,32 @@ public class RoomClientRepository implements Repository<RoomClient> {
             if (statement.executeUpdate() == 0) {
                 throw new DataAccessException("No se pudo insertar la relación room_client.");
             }
-
-            try (ResultSet keys = statement.getGeneratedKeys()) {
-                if (keys.next()) {
-                    roomClient.setClientId(keys.getInt(1));  // Assuming the ID is generated or mapped back
-                    // Optionally, fetch additional fields like timestamps if needed
-                } else {
-                    throw new DataAccessException("No se pudo obtener el ID generado.");
-                }
-            }
         } catch (SQLException e) {
             throw new DataAccessException("Error al agregar la relación room_client", e);
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
-    public RoomClient getById(int id) throws DataAccessException {
-        String sql = "SELECT * FROM room_client WHERE client_id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
+    public RoomClient getByIds(int clientId, int roomId) throws DataAccessException {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ROOM_CLIENT_BY_IDS)) {
+            statement.setInt(1, clientId);
+            statement.setInt(2, roomId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return mapResultSet(resultSet);
                 } else {
-                    throw new DataAccessException("No se encontró la relación room_client con client_id " + id);
+                    throw new DataAccessException("No se encontró la relación room_client con client_id " + clientId + " y room_id " + roomId);
                 }
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error al obtener la relación room_client con client_id " + id, e);
+            throw new DataAccessException("Error al obtener la relación room_client con client_id " + clientId + " y room_id " + roomId, e);
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public List<RoomClient> getAll() throws DataAccessException {
-        String sql = "SELECT * FROM room_client";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ROOM_CLIENTS);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<RoomClient> roomClients = new ArrayList<>();
@@ -92,18 +81,14 @@ public class RoomClientRepository implements Repository<RoomClient> {
         }
     }
 
-    // --------------------- UPDATE ---------------------
     @Override
     public void update(RoomClient roomClient) throws DataAccessException {
-        String sql = "UPDATE room_client SET room_id = ?, start_time = ?, end_time = ?, completed = ? WHERE client_id = ? AND room_id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, roomClient.getRoomId());
-            statement.setTimestamp(2, roomClient.getStartTime());
-            statement.setTimestamp(3, roomClient.getEndTime());
-            statement.setBoolean(4, roomClient.isCompleted());
-            statement.setInt(5, roomClient.getClientId());
-            statement.setInt(6, roomClient.getRoomId());
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_ROOM_CLIENT)) {
+            statement.setTimestamp(1, roomClient.getStartTime());
+            statement.setTimestamp(2, roomClient.getEndTime());
+            statement.setBoolean(3, roomClient.isCompleted());
+            statement.setInt(4, roomClient.getClientId());
+            statement.setInt(5, roomClient.getRoomId());
 
             if (statement.executeUpdate() == 0) {
                 throw new DataAccessException("No se encontró la relación room_client con client_id " + roomClient.getClientId() + " y room_id " + roomClient.getRoomId());
@@ -113,15 +98,8 @@ public class RoomClientRepository implements Repository<RoomClient> {
         }
     }
 
-    // --------------------- DELETE ---------------------
-    @Override
-    public void delete(int id) throws DataAccessException {
-        throw new UnsupportedOperationException("Debe llamar a delete con clientId y roomId");
-    }
     public void delete(int clientId, int roomId) throws DataAccessException {
-        String sql = "DELETE FROM room_client WHERE client_id = ? AND room_id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_ROOM_CLIENT)) {
             statement.setInt(1, clientId);
             statement.setInt(2, roomId);
 

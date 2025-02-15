@@ -9,6 +9,13 @@ import java.util.List;
 public class HintRepository implements Repository<Hint> {
     private final Connection connection;
 
+    private static final String INSERT_HINT = "INSERT INTO hint (room_id, description, price) VALUES (?, ?, ?)";
+    private static final String FETCH_CREATED = "SELECT created_at FROM hint WHERE id = ?";
+    private static final String SELECT_HINT_BY_ID = "SELECT * FROM hint WHERE id = ?";
+    private static final String SELECT_ALL_HINTS = "SELECT * FROM hint";
+    private static final String UPDATE_HINT = "UPDATE hint SET description = ?, price = ? WHERE id = ?";
+    private static final String DELETE_HINT = "DELETE FROM hint WHERE id = ?";
+
     public HintRepository(Connection connection) {
         this.connection = connection;
     }
@@ -23,12 +30,9 @@ public class HintRepository implements Repository<Hint> {
         );
     }
 
-    // --------------------- CREATE ---------------------
     @Override
     public void add(Hint hint) throws DataAccessException {
-        String sql = "INSERT INTO hint (room_id, description, price) VALUES (?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_HINT, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, hint.getRoomId());
             statement.setString(2, hint.getDescription());
             statement.setDouble(3, hint.getPrice());
@@ -41,9 +45,7 @@ public class HintRepository implements Repository<Hint> {
                 if (keys.next()) {
                     hint.setId(keys.getInt(1));
 
-                    // Nueva consulta para recuperar created_at
-                    String fetchSql = "SELECT created_at FROM hint WHERE id = ?";
-                    try (PreparedStatement fetchStatement = connection.prepareStatement(fetchSql)) {
+                    try (PreparedStatement fetchStatement = connection.prepareStatement(FETCH_CREATED)) {
                         fetchStatement.setInt(1, hint.getId());
                         try (ResultSet rs = fetchStatement.executeQuery()) {
                             if (rs.next()) {
@@ -60,12 +62,9 @@ public class HintRepository implements Repository<Hint> {
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public Hint getById(int id) throws DataAccessException {
-        String sql = "SELECT * FROM hint WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_HINT_BY_ID)) {
             statement.setInt(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -82,9 +81,7 @@ public class HintRepository implements Repository<Hint> {
 
     @Override
     public List<Hint> getAll() throws DataAccessException {
-        String sql = "SELECT * FROM hint";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HINTS);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<Hint> hints = new ArrayList<>();
@@ -97,12 +94,9 @@ public class HintRepository implements Repository<Hint> {
         }
     }
 
-    // --------------------- UPDATE ---------------------
     @Override
     public void update(Hint hint) throws DataAccessException {
-        String sql = "UPDATE hint SET description = ?, price = ? WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_HINT)) {
             statement.setString(1, hint.getDescription());
             statement.setDouble(2, hint.getPrice());
             statement.setInt(3, hint.getId());
@@ -115,12 +109,9 @@ public class HintRepository implements Repository<Hint> {
         }
     }
 
-    // --------------------- DELETE ---------------------
     @Override
     public void delete(int id) throws DataAccessException {
-        String sql = "DELETE FROM hint WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_HINT)) {
             statement.setInt(1, id);
 
             if (statement.executeUpdate() == 0) {

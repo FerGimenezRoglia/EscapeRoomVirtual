@@ -9,6 +9,13 @@ import java.util.List;
 public class TicketRepository implements Repository<Ticket> {
     private final Connection connection;
 
+    private static final String INSERT_TICKET = "INSERT INTO ticket (client_id, room_id, total_price, purchase_date) VALUES (?, ?, ?, ?)";
+    private static final String FETCH_PURCHASE_DATE = "SELECT purchase_date FROM ticket WHERE id = ?";
+    private static final String SELECT_TICKET_BY_ID = "SELECT * FROM ticket WHERE id = ?";
+    private static final String SELECT_ALL_TICKETS = "SELECT * FROM ticket";
+    private static final String UPDATE_TICKET = "UPDATE ticket SET client_id = ?, room_id = ?, total_price = ? WHERE id = ?";
+    private static final String DELETE_TICKET = "DELETE FROM ticket WHERE id = ?";
+
     public TicketRepository(Connection connection) {
         this.connection = connection;
     }
@@ -23,15 +30,9 @@ public class TicketRepository implements Repository<Ticket> {
         );
     }
 
-    // --------------------- CREATE ---------------------
     @Override
     public void add(Ticket ticket) throws DataAccessException {
-        String sql = "INSERT INTO ticket (client_id, room_id, total_price, purchase_date) VALUES (?, ?, ?, ?)";
-
-        // Usar un PreparedStatement para ejecutar la consulta de manera segura.
-        // Statement.RETURN_GENERATED_KEYS permite recuperar el ID generado automáticamente.
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_TICKET, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, ticket.getClientId());
             statement.setInt(2, ticket.getRoomId());
             statement.setDouble(3, ticket.getTotalPrice());
@@ -43,11 +44,9 @@ public class TicketRepository implements Repository<Ticket> {
 
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 if (keys.next()) {
-                    // Asignar el ID generado al objeto Client.
                     ticket.setId(keys.getInt(1));
 
-                    String fetchSql = "SELECT purchase_date ticket WHERE id = ?";
-                    try (PreparedStatement fetchStatement = connection.prepareStatement(fetchSql)) {
+                    try (PreparedStatement fetchStatement = connection.prepareStatement(FETCH_PURCHASE_DATE)) {
                         fetchStatement.setInt(1, ticket.getId());
                         try (ResultSet rs = fetchStatement.executeQuery()) {
                             if (rs.next()) {
@@ -55,7 +54,6 @@ public class TicketRepository implements Repository<Ticket> {
                             }
                         }
                     }
-
                 } else {
                     throw new DataAccessException("No se pudo obtener el ID generado.");
                 }
@@ -65,57 +63,41 @@ public class TicketRepository implements Repository<Ticket> {
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public Ticket getById(int id) throws DataAccessException {
-        String sql = "SELECT * FROM ticket WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_TICKET_BY_ID)) {
+            statement.setInt(1, id);
 
-        // Usar PreparedStatement para prevenir inyección SQL y garantizar seguridad.
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id); // Asignar el ID como parámetro.
-
-            // Ejecutar la consulta y obtener el ResultSet.
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    // Si se encuentra el ticket, mapear y devolver el objeto Ticket.
                     return mapResultSet(resultSet);
                 } else {
-                    // Si no se encuentra el ticket, lanzar una excepción.
                     throw new DataAccessException("No se encontró el ticket con ID " + id);
                 }
             }
         } catch (SQLException e) {
-            // Capturar y relanzar cualquier excepción de SQL como DataAccessException.
             throw new DataAccessException("Error al obtener el ticket con ID " + id, e);
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public List<Ticket> getAll() throws DataAccessException {
-        String sql = "SELECT * FROM ticket";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_TICKETS);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<Ticket> tickets = new ArrayList<>();
-
             while (resultSet.next()) {
                 tickets.add(mapResultSet(resultSet));
             }
-
             return tickets;
         } catch (SQLException e) {
             throw new DataAccessException("Error al obtener la lista de tickets", e);
         }
     }
 
-    // --------------------- UPDATE ---------------------
     @Override
     public void update(Ticket ticket) throws DataAccessException {
-        String sql = "UPDATE ticket SET client_id = ?, room_id = ?, total_price = ? WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_TICKET)) {
             statement.setInt(1, ticket.getClientId());
             statement.setInt(2, ticket.getRoomId());
             statement.setDouble(3, ticket.getTotalPrice());
@@ -129,12 +111,9 @@ public class TicketRepository implements Repository<Ticket> {
         }
     }
 
-    // --------------------- DELETE ---------------------
     @Override
     public void delete(int id) throws DataAccessException {
-        String sql = "DELETE FROM ticket WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_TICKET)) {
             statement.setInt(1, id);
 
             if (statement.executeUpdate() == 0) {
@@ -144,5 +123,4 @@ public class TicketRepository implements Repository<Ticket> {
             throw new DataAccessException("Error al eliminar el ticket", e);
         }
     }
-
 }
