@@ -1,8 +1,15 @@
 package view;
 
+import config.DatabaseConnection;
 import exceptions.AppException;
 import controllers.Operaciones;
+import repositories.DecorationRepository;
+import repositories.EscapeRoomRepository;
+import repositories.HintRepository;
+import repositories.RoomRepository;
+import services.EscapeRoomService;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class GestionMenu implements IMenuGestion {
@@ -48,7 +55,19 @@ public class GestionMenu implements IMenuGestion {
     }
 
     private void inicializar() {
-        System.out.println("Inicializando elementos...");
+
+        // *** Fer: ----> estoy probando el EscapeRoomService *** //
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        EscapeRoomRepository escapeRoomRepo = new EscapeRoomRepository(connection);
+        RoomRepository roomRepo = new RoomRepository(connection);
+        HintRepository hintRepo = new HintRepository(connection);
+        DecorationRepository decorationRepo = new DecorationRepository(connection);
+
+        EscapeRoomService escapeRoomService = new EscapeRoomService(escapeRoomRepo, roomRepo, hintRepo, decorationRepo, connection);
+        escapeRoomService.initializeEscapeRoom();
+        System.out.println("Inicialización completada con éxito.");
+
+        //System.out.println("Inicializando elementos...");
         // Aquí puedes incluir lógica específica para crear salas, pistas y decoraciones
     }
 

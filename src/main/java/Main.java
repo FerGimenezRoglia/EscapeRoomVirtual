@@ -15,5 +15,6 @@ public class Main {
 
         // Cerrar la conexión a la base de datos
         initializer.close();
+
     }
 }
