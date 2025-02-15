@@ -32,7 +32,6 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
 
     @Override
     public void add(EscapeRoom escapeRoom) throws DataAccessException {
-
         try (PreparedStatement statement = connection.prepareStatement(INSERT_ESCAPE_ROOM, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, escapeRoom.getName());
 
@@ -43,6 +42,7 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 if (keys.next()) {
                     escapeRoom.setId(keys.getInt(1));
+
                     try (PreparedStatement fetchStatement = connection.prepareStatement(FETCH_CREATED_UPDATED)) {
                         fetchStatement.setInt(1, escapeRoom.getId());
                         try (ResultSet rs = fetchStatement.executeQuery()) {
@@ -97,6 +97,7 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_ESCAPE_ROOM)) {
             statement.setString(1, escapeRoom.getName());
             statement.setInt(2, escapeRoom.getId());
+
             if (statement.executeUpdate() == 0) {
                 throw new DataAccessException("No se encontró la Escape Room con ID " + escapeRoom.getId());
             }
@@ -117,5 +118,3 @@ public class EscapeRoomRepository implements Repository<EscapeRoom> {
         }
     }
 }
-
-

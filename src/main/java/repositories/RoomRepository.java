@@ -9,6 +9,13 @@ import java.util.List;
 public class RoomRepository implements Repository<Room> {
     private final Connection connection;
 
+    private static final String INSERT_ROOM = "INSERT INTO room (escape_room_id, name, difficulty_level, price) VALUES (?, ?, ?, ?)";
+    private static final String FETCH_CREATED_UPDATED = "SELECT created_at, updated_at FROM room WHERE id = ?";
+    private static final String SELECT_ROOM_BY_ID = "SELECT * FROM room WHERE id = ?";
+    private static final String SELECT_ALL_ROOMS = "SELECT * FROM room";
+    private static final String UPDATE_ROOM = "UPDATE room SET name = ?, difficulty_level = ?, price = ? WHERE id = ?";
+    private static final String DELETE_ROOM = "DELETE FROM room WHERE id = ?";
+
     public RoomRepository(Connection connection) {
         this.connection = connection;
     }
@@ -18,22 +25,19 @@ public class RoomRepository implements Repository<Room> {
                 resultSet.getInt("id"),
                 resultSet.getInt("escape_room_id"),
                 resultSet.getString("name"),
-                Room.DifficultyLevel.valueOf(resultSet.getString("difficulty_level")), // +++++++ Conversión del String a Enum ++++++
+                Room.DifficultyLevel.valueOf(resultSet.getString("difficulty_level")), // Convertir String a Enum
                 resultSet.getDouble("price"),
                 resultSet.getTimestamp("created_at"),
                 resultSet.getTimestamp("updated_at")
         );
     }
 
-    // --------------------- CREATE ---------------------
     @Override
     public void add(Room room) throws DataAccessException {
-        String sql = "INSERT INTO room (escape_room_id, name, difficulty_level, price) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_ROOM, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, room.getEscapeRoomId());
             statement.setString(2, room.getName());
-            statement.setString(3, room.getDifficultyLevel().name()); // +++++++++ Convertimos el Enum a String
+            statement.setString(3, room.getDifficultyLevel().name()); // Convertir Enum a String
             statement.setDouble(4, room.getPrice());
 
             if (statement.executeUpdate() == 0) {
@@ -44,9 +48,7 @@ public class RoomRepository implements Repository<Room> {
                 if (keys.next()) {
                     room.setId(keys.getInt(1));
 
-                    // Nueva consulta para recuperar created_at y updated_at
-                    String fetchSql = "SELECT created_at, updated_at FROM room WHERE id = ?";
-                    try (PreparedStatement fetchStatement = connection.prepareStatement(fetchSql)) {
+                    try (PreparedStatement fetchStatement = connection.prepareStatement(FETCH_CREATED_UPDATED)) {
                         fetchStatement.setInt(1, room.getId());
                         try (ResultSet rs = fetchStatement.executeQuery()) {
                             if (rs.next()) {
@@ -64,12 +66,9 @@ public class RoomRepository implements Repository<Room> {
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public Room getById(int id) throws DataAccessException {
-        String sql = "SELECT * FROM room WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ROOM_BY_ID)) {
             statement.setInt(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -86,9 +85,7 @@ public class RoomRepository implements Repository<Room> {
 
     @Override
     public List<Room> getAll() throws DataAccessException {
-        String sql = "SELECT * FROM room";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ROOMS);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<Room> rooms = new ArrayList<>();
@@ -101,14 +98,11 @@ public class RoomRepository implements Repository<Room> {
         }
     }
 
-    // --------------------- UPDATE ---------------------
     @Override
     public void update(Room room) throws DataAccessException {
-        String sql = "UPDATE room SET name = ?, difficulty_level = ?, price = ? WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_ROOM)) {
             statement.setString(1, room.getName());
-            statement.setString(3, room.getDifficultyLevel().name()); // +++++++++ Convertimos el Enum a String
+            statement.setString(2, room.getDifficultyLevel().name()); // Convertir Enum a String
             statement.setDouble(3, room.getPrice());
             statement.setInt(4, room.getId());
 
@@ -120,12 +114,9 @@ public class RoomRepository implements Repository<Room> {
         }
     }
 
-    // --------------------- DELETE ---------------------
     @Override
     public void delete(int id) throws DataAccessException {
-        String sql = "DELETE FROM room WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_ROOM)) {
             statement.setInt(1, id);
 
             if (statement.executeUpdate() == 0) {
