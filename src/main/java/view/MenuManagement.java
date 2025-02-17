@@ -74,20 +74,9 @@ public class MenuManagement implements IMenuGestion {
     private void showMenuManagement() {
         try {
             while (true) {
-                System.out.println("\n===== MENÚ DE GESTIÓN =====");
-                System.out.println("1. Salas");
-                System.out.println("2. Pistas");
-                System.out.println("3. Decoraciones");
-                System.out.println("4. Inventario");
-                System.out.println("5. Tickets");
-                System.out.println("6. Ingresos");
-                System.out.println("7. Notificaciones");
-                System.out.println("8. Certificados");
-                System.out.println("9. Volver");
-                System.out.print("Elige una opción: ");
-
-                int opcion = getOption();
-                switch (opcion) {
+                showMenuManagementInit();
+                int option = getOption();
+                switch (option) {
                     case 1 -> operations.RoomManagement();
 //                    case 2 -> operaciones.gestionarPistas();
 //                    case 3 -> operaciones.gestionarDecoraciones();
@@ -108,11 +97,26 @@ public class MenuManagement implements IMenuGestion {
         }
     }
 
+    private void showMenuManagementInit() {
+        System. out.println("\n===== MENÚ DE GESTIÓN =====");
+        System.out.println("1. Salas");
+        System.out.println("2. Pistas");
+        System.out.println("3. Decoraciones");
+        System.out.println("4. Inventario");
+        System.out.println("5. Tickets");
+        System.out.println("6. Ingresos");
+        System.out.println("7. Notificaciones");
+        System.out.println("8. Certificados");
+        System.out.println("9. Volver");
+        System.out.print("Elige una opción: ");
+    }
+
+
     private int getOption() {
-        try {
-            return Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            throw new AppException("Error: Ingresa un número válido.", e);
-        }
+    try {
+        return Integer.parseInt(scanner.nextLine());
+    } catch (NumberFormatException e) {
+        throw new AppException("Error: Ingresa un número válido.", e);
+    }
     }
 }
