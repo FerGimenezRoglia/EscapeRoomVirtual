@@ -2,22 +2,30 @@ package view;
 
 import config.DatabaseConnection;
 import exceptions.AppException;
-import controllers.Operations;
+
+import controllers.ControllerManagement;
+
 import repositories.DecorationRepository;
 import repositories.EscapeRoomRepository;
 import repositories.HintRepository;
 import repositories.RoomRepository;
-import services.EscapeRoomService;
 
+import services.EscapeRoomService;
+import services.RoomService;
+
+import view.management.RoomManagement;
 import java.sql.Connection;
 import java.util.Scanner;
 
 public class MenuManagement implements IMenuGestion {
-    private final Operations operations;
+    private final ControllerManagement controllerManagement;
+    private final RoomManagement roomManagement; // Instancia de RoomManagement
     private final Scanner scanner;
 
-    public MenuManagement(Operations operations) {
-        this.operations = operations;
+    // Constructor: Recibe ControllerManagement y RoomService
+    public MenuManagement(ControllerManagement controllerManagement, RoomService roomService) {
+        this.controllerManagement = controllerManagement;
+        this.roomManagement = new RoomManagement(roomService); // Inicializa RoomManagement con roomService
         this.scanner = new Scanner(System.in);
     }
 
@@ -44,19 +52,14 @@ public class MenuManagement implements IMenuGestion {
 
     private void ShowMenuInit() {
         System.out.println("\nBIENVENIDO");
-        System.out.println();
-
         System.out.println("\n====== MENÚ PRINCIPAL=====");
         System.out.println("1. Inicializar");
         System.out.println("2. Gestionar");
         System.out.println("3. Salir");
-        System.out.println();
         System.out.print("Elige una opción: ");
     }
 
     private void init() {
-
-        // *** Fer: ----> estoy probando el EscapeRoomService *** //
         Connection connection = DatabaseConnection.getInstance().getConnection();
         EscapeRoomRepository escapeRoomRepo = new EscapeRoomRepository(connection);
         RoomRepository roomRepo = new RoomRepository(connection);
@@ -66,9 +69,6 @@ public class MenuManagement implements IMenuGestion {
         EscapeRoomService escapeRoomService = new EscapeRoomService(escapeRoomRepo, roomRepo, hintRepo, decorationRepo, connection);
         escapeRoomService.initializeEscapeRoom();
         System.out.println("Inicialización completada con éxito.");
-
-        //System.out.println("Inicializando elementos...");
-        // Aquí puedes incluir lógica específica para crear salas, pistas y decoraciones
     }
 
     private void showMenuManagement() {
@@ -77,14 +77,7 @@ public class MenuManagement implements IMenuGestion {
                 showMenuManagementInit();
                 int option = getOption();
                 switch (option) {
-                    case 1 -> operations.RoomManagement();
-//                    case 2 -> operaciones.gestionarPistas();
-//                    case 3 -> operaciones.gestionarDecoraciones();
-//                    case 4 -> operaciones.gestionarInventario();
-//                    case 5 -> operaciones.gestionarTickets();
-//                    case 6 -> operaciones.gestionarIngresos();
-//                    case 7 -> operaciones.gestionarNotificaciones();
-//                    case 8 -> operaciones.gestionarCertificados();
+                    case 1 -> roomManagement.manageRooms();
                     case 9 -> {
                         System.out.println("Volviendo...");
                         return;
@@ -98,25 +91,20 @@ public class MenuManagement implements IMenuGestion {
     }
 
     private void showMenuManagementInit() {
-        System. out.println("\n===== MENÚ DE GESTIÓN =====");
+        System.out.println("\n===== MENÚ DE GESTIÓN =====");
         System.out.println("1. Salas");
         System.out.println("2. Pistas");
         System.out.println("3. Decoraciones");
-        System.out.println("4. Inventario");
-        System.out.println("5. Tickets");
-        System.out.println("6. Ingresos");
-        System.out.println("7. Notificaciones");
-        System.out.println("8. Certificados");
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }
 
 
     private int getOption() {
-    try {
-        return Integer.parseInt(scanner.nextLine());
-    } catch (NumberFormatException e) {
-        throw new AppException("Error: Ingresa un número válido.", e);
-    }
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            throw new AppException("Error: Ingresa un número válido.", e);
+        }
     }
 }

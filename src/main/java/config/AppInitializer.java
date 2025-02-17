@@ -1,24 +1,24 @@
 package config;
 
 import services.RoomService;
-import controllers.Operations;
+import controllers.ControllerManagement;
 import java.sql.Connection;
 
 public class AppInitializer {
     private DatabaseConnection dbConnection;
     private Connection connection;
     private RoomService roomService;
-    private Operations operations;
+    private ControllerManagement controllerManagement;
 
     public AppInitializer() {
         dbConnection = DatabaseConnection.getInstance();
         connection = dbConnection.getConnection();
         roomService = new RoomService(connection);
-        operations = new Operations(roomService);
+        controllerManagement = new ControllerManagement(roomService);
     }
 
-    public Operations getOperaciones() {
-        return operations;
+    public ControllerManagement getOperaciones() {
+        return controllerManagement;
     }
 
     public void runScheme() {
