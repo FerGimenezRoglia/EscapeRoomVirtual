@@ -2,7 +2,7 @@ package view;
 
 import config.DatabaseConnection;
 import exceptions.AppException;
-import controllers.Operaciones;
+import controllers.Operations;
 import repositories.DecorationRepository;
 import repositories.EscapeRoomRepository;
 import repositories.HintRepository;
@@ -12,24 +12,24 @@ import services.EscapeRoomService;
 import java.sql.Connection;
 import java.util.Scanner;
 
-public class GestionMenu implements IMenuGestion {
-    private final Operaciones operaciones;
+public class MenuManagement implements IMenuGestion {
+    private final Operations operations;
     private final Scanner scanner;
 
-    public GestionMenu(Operaciones operaciones) {
-        this.operaciones = operaciones;
+    public MenuManagement(Operations operations) {
+        this.operations = operations;
         this.scanner = new Scanner(System.in);
     }
 
     @Override
-    public void mostrarMenu() {
+    public void showMenu() {
         try {
             while (true) {
-                mostrarMenuInicio();
-                int opcion = obtenerOpcion();
-                switch (opcion) {
-                    case 1 -> inicializar();
-                    case 2 -> mostrarMenuGestion();
+                ShowMenuInit();
+                int option = getOption();
+                switch (option) {
+                    case 1 -> init();
+                    case 2 -> showMenuManagement();
                     case 3 -> {
                         System.out.println("Gracias por participar!");
                         return;
@@ -42,7 +42,7 @@ public class GestionMenu implements IMenuGestion {
         }
     }
 
-    private void mostrarMenuInicio() {
+    private void ShowMenuInit() {
         System.out.println("\nBIENVENIDO");
         System.out.println();
 
@@ -54,7 +54,7 @@ public class GestionMenu implements IMenuGestion {
         System.out.print("Elige una opción: ");
     }
 
-    private void inicializar() {
+    private void init() {
 
         // *** Fer: ----> estoy probando el EscapeRoomService *** //
         Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -71,7 +71,7 @@ public class GestionMenu implements IMenuGestion {
         // Aquí puedes incluir lógica específica para crear salas, pistas y decoraciones
     }
 
-    private void mostrarMenuGestion() {
+    private void showMenuManagement() {
         try {
             while (true) {
                 System.out.println("\n===== MENÚ DE GESTIÓN =====");
@@ -86,9 +86,9 @@ public class GestionMenu implements IMenuGestion {
                 System.out.println("9. Volver");
                 System.out.print("Elige una opción: ");
 
-                int opcion = obtenerOpcion();
+                int opcion = getOption();
                 switch (opcion) {
-                    case 1 -> operaciones.gestionarSalas();
+                    case 1 -> operations.RoomManagement();
 //                    case 2 -> operaciones.gestionarPistas();
 //                    case 3 -> operaciones.gestionarDecoraciones();
 //                    case 4 -> operaciones.gestionarInventario();
@@ -108,7 +108,7 @@ public class GestionMenu implements IMenuGestion {
         }
     }
 
-    private int obtenerOpcion() {
+    private int getOption() {
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {

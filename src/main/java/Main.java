@@ -1,5 +1,5 @@
 import config.AppInitializer;
-import view.GestionMenu;
+import view.MenuManagement;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,11 +7,11 @@ public class Main {
         AppInitializer initializer = new AppInitializer();
 
         // Ejecutar el esquema SQL para asegurar que la base de datos esté lista
-        initializer.ejecutarSchema();
+        initializer.runScheme();
 
         // Crear e iniciar el menú
-        GestionMenu menu = new GestionMenu(initializer.getOperaciones());
-        menu.mostrarMenu();
+        MenuManagement menu = new MenuManagement(initializer.getOperaciones());
+        menu.showMenu();
 
         // Cerrar la conexión a la base de datos
         initializer.close();
