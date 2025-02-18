@@ -2,45 +2,41 @@ package view;
 
 import config.DatabaseConnection;
 import exceptions.AppException;
-
 import controllers.ControllerManagement;
-
 import repositories.DecorationRepository;
 import repositories.EscapeRoomRepository;
 import repositories.HintRepository;
 import repositories.RoomRepository;
-
 import services.EscapeRoomService;
-import services.RoomService;
-
 import view.management.RoomManagement;
+import view.management.DecorationManagement;
 import java.sql.Connection;
 import java.util.Scanner;
 
 public class MenuManagement implements IMenuGestion {
-    private final ControllerManagement controllerManagement;
-    private final RoomManagement roomManagement; // Instancia de RoomManagement
+    private final RoomManagement roomManagement;
+    private final DecorationManagement decorationManagement;
     private final Scanner scanner;
 
-    // Constructor: Recibe ControllerManagement y RoomService
-    public MenuManagement(ControllerManagement controllerManagement, RoomService roomService) {
-        this.controllerManagement = controllerManagement;
-        this.roomManagement = new RoomManagement(roomService); // Inicializa RoomManagement con roomService
+    public MenuManagement(ControllerManagement controllerManagement) {
+        this.roomManagement = new RoomManagement(controllerManagement);
+        this.decorationManagement = new DecorationManagement(controllerManagement);
         this.scanner = new Scanner(System.in);
     }
 
     @Override
     public void showMenu() {
+        boolean continuar = true;
         try {
-            while (true) {
-                ShowMenuInit();
+            while (continuar) {
+                showMenuInit();
                 int option = getOption();
                 switch (option) {
                     case 1 -> init();
                     case 2 -> showMenuManagement();
                     case 3 -> {
                         System.out.println("Gracias por participar!");
-                        return;
+                        continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
                 }
@@ -50,9 +46,9 @@ public class MenuManagement implements IMenuGestion {
         }
     }
 
-    private void ShowMenuInit() {
+    private void showMenuInit() {
         System.out.println("\nBIENVENIDO");
-        System.out.println("\n====== MENÚ PRINCIPAL=====");
+        System.out.println("\n====== MENÚ PRINCIPAL ======");
         System.out.println("1. Inicializar");
         System.out.println("2. Gestionar");
         System.out.println("3. Salir");
@@ -72,15 +68,17 @@ public class MenuManagement implements IMenuGestion {
     }
 
     private void showMenuManagement() {
+        boolean continuar = true;
         try {
-            while (true) {
+            while (continuar) {
                 showMenuManagementInit();
                 int option = getOption();
                 switch (option) {
                     case 1 -> roomManagement.manageRooms();
+                    case 2 -> decorationManagement.manageDecorations();
                     case 9 -> {
                         System.out.println("Volviendo...");
-                        return;
+                        continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
                 }
@@ -93,12 +91,10 @@ public class MenuManagement implements IMenuGestion {
     private void showMenuManagementInit() {
         System.out.println("\n===== MENÚ DE GESTIÓN =====");
         System.out.println("1. Salas");
-        System.out.println("2. Pistas");
-        System.out.println("3. Decoraciones");
+        System.out.println("2. Decoraciones"); // ✅ Opción agregada
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }
-
 
     private int getOption() {
         try {

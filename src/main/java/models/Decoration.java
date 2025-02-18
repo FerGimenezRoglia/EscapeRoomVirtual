@@ -9,9 +9,8 @@ public class Decoration {
     private String name;
     private String material;
     private double price;
-    private Timestamp createdAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+    private Timestamp createdAt;
 
-    // Constructor vacío
     public Decoration() {}
 
     // Constructor con todos los atributos

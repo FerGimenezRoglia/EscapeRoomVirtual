@@ -2,21 +2,22 @@ package view.management;
 
 import models.Room;
 import exceptions.AppException;
-import services.RoomService;
+import controllers.ControllerManagement;
 import java.util.Scanner;
 
 public class RoomManagement {
-    private final RoomService roomService;
+    private final ControllerManagement controllerManagement;
     private final Scanner scanner;
 
-    public RoomManagement(RoomService roomService) {
-        this.roomService = roomService;
+    public RoomManagement(ControllerManagement controllerManagement) {
+        this.controllerManagement = controllerManagement;
         this.scanner = new Scanner(System.in);
     }
 
     public void manageRooms() {
+        boolean continuar = true; // Variable de control en lugar de return
         try {
-            while (true) {
+            while (continuar) {
                 System.out.println("\n===== GESTIÓN DE SALAS =====");
                 System.out.println("1. Agregar Sala");
                 System.out.println("2. Eliminar Sala");
@@ -29,7 +30,7 @@ public class RoomManagement {
                     case 2 -> deleteRoom();
                     case 3 -> {
                         System.out.println("Volviendo...");
-                        return;
+                        continuar = false; // Se cambia la variable para salir del bucle
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
                 }
@@ -49,15 +50,15 @@ public class RoomManagement {
         System.out.print("Ingrese el precio de la sala: ");
         double price = Double.parseDouble(scanner.nextLine());
 
-        Room room = roomService.addRoom(escapeRoomId, name, difficulty, price);
-        System.out.println("Sala agregada: " + room);
+        controllerManagement.addRoom(escapeRoomId, name, difficulty.name(), price);
+        System.out.println("Sala agregada correctamente.");
     }
 
     private void deleteRoom() {
         System.out.print("Ingrese el ID de la sala a eliminar: ");
         int roomId = Integer.parseInt(scanner.nextLine());
 
-        boolean success = roomService.deleteRoom(roomId);
+        boolean success = controllerManagement.deleteRoom(roomId);
         if (success) {
             System.out.println("Sala eliminada con éxito.");
         } else {
