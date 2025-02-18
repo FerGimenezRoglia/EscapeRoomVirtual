@@ -12,7 +12,7 @@ public class DecorationService {
         this.decorationRepository = new DecorationRepository(connection);
     }
 
-    public void addDecoration(int roomId, String name, String material, double price) throws DataAccessException {
+    public void addDecoration(int roomId, String name, String material, double price) {
         if (roomId <= 0) {
             throw new DataAccessException("No se puede agregar una decoración sin una sala válida.");
         }
@@ -20,7 +20,8 @@ public class DecorationService {
         decorationRepository.add(decoration);
     }
 
-    public boolean deleteDecoration(int decorationId) throws DataAccessException {
+
+    public boolean deleteDecoration(int decorationId) {
         try {
             decorationRepository.delete(decorationId);
             return true;

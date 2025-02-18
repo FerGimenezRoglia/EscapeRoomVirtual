@@ -1,26 +1,27 @@
 package view;
 
-import config.DatabaseConnection;
+import controllers.InitializationController;
 import exceptions.AppException;
-import controllers.ControllerManagement;
-import repositories.DecorationRepository;
-import repositories.EscapeRoomRepository;
-import repositories.HintRepository;
-import repositories.RoomRepository;
-import services.EscapeRoomService;
+import controllers.ManagementController;
+
 import view.management.RoomManagement;
 import view.management.DecorationManagement;
-import java.sql.Connection;
+import view.management.HintManagementView;
+
 import java.util.Scanner;
 
 public class MenuManagement implements IMenuGestion {
+    private final InitializationController initController;
     private final RoomManagement roomManagement;
     private final DecorationManagement decorationManagement;
+    private final HintManagementView hintManagementView;
     private final Scanner scanner;
 
-    public MenuManagement(ControllerManagement controllerManagement) {
-        this.roomManagement = new RoomManagement(controllerManagement);
-        this.decorationManagement = new DecorationManagement(controllerManagement);
+    public MenuManagement(InitializationController initController, ManagementController managementController) {
+        this.initController = initController;
+        this.roomManagement = new RoomManagement(managementController);
+        this.decorationManagement = new DecorationManagement(managementController);
+        this.hintManagementView = new HintManagementView(managementController);
         this.scanner = new Scanner(System.in);
     }
 
@@ -32,7 +33,9 @@ public class MenuManagement implements IMenuGestion {
                 showMenuInit();
                 int option = getOption();
                 switch (option) {
-                    case 1 -> init();
+                    case 1 -> {
+                        initController.startEscapeRoomSetup();
+                    }
                     case 2 -> showMenuManagement();
                     case 3 -> {
                         System.out.println("Gracias por participar!");
@@ -55,17 +58,6 @@ public class MenuManagement implements IMenuGestion {
         System.out.print("Elige una opción: ");
     }
 
-    private void init() {
-        Connection connection = DatabaseConnection.getInstance().getConnection();
-        EscapeRoomRepository escapeRoomRepo = new EscapeRoomRepository(connection);
-        RoomRepository roomRepo = new RoomRepository(connection);
-        HintRepository hintRepo = new HintRepository(connection);
-        DecorationRepository decorationRepo = new DecorationRepository(connection);
-
-        EscapeRoomService escapeRoomService = new EscapeRoomService(escapeRoomRepo, roomRepo, hintRepo, decorationRepo, connection);
-        escapeRoomService.initializeEscapeRoom();
-        System.out.println("Inicialización completada con éxito.");
-    }
 
     private void showMenuManagement() {
         boolean continuar = true;
@@ -76,6 +68,7 @@ public class MenuManagement implements IMenuGestion {
                 switch (option) {
                     case 1 -> roomManagement.manageRooms();
                     case 2 -> decorationManagement.manageDecorations();
+                    case 3 -> hintManagementView.manageHints();
                     case 9 -> {
                         System.out.println("Volviendo...");
                         continuar = false;
@@ -91,7 +84,8 @@ public class MenuManagement implements IMenuGestion {
     private void showMenuManagementInit() {
         System.out.println("\n===== MENÚ DE GESTIÓN =====");
         System.out.println("1. Salas");
-        System.out.println("2. Decoraciones"); // ✅ Opción agregada
+        System.out.println("2. Decoraciones");
+        System.out.println("3. Pistas");
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }

@@ -1,4 +1,6 @@
 import config.AppInitializer;
+import controllers.InitializationController;
+import controllers.ManagementController;
 import view.MenuManagement;
 
 public class Main {
@@ -9,12 +11,15 @@ public class Main {
         // Ejecutar el esquema SQL para asegurar que la base de datos esté lista
         initializer.runScheme();
 
-        // Crear e iniciar el menú
-        MenuManagement menu = new MenuManagement(initializer.getOperaciones());
+        // Obtener los controladores desde AppInitializer
+        InitializationController initializationController = initializer.getInitializationController();
+        ManagementController managementController = initializer.getManagementController();
+
+        // Crear e iniciar el menú con ambos controladores
+        MenuManagement menu = new MenuManagement(initializationController, managementController);
         menu.showMenu();
 
         // Cerrar la conexión a la base de datos
         initializer.close();
-
     }
 }

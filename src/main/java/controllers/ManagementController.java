@@ -2,17 +2,20 @@ package controllers;
 
 import services.RoomService;
 import services.DecorationService;
+import services.HintService;
 import models.Room;
 import exceptions.DataAccessException;
 
-public class ControllerManagement {
+public class ManagementController {
     private final RoomService roomService;
     private final DecorationService decorationService;
+    private final HintService hintService;
 
     // Constructor recibe los servicios
-    public ControllerManagement(RoomService roomService, DecorationService decorationService) {
+    public ManagementController(RoomService roomService, DecorationService decorationService, HintService hintService) {
         this.roomService = roomService;
         this.decorationService = decorationService;
+        this.hintService = hintService;
     }
 
     // !Métodos para gestionar salas
@@ -45,11 +48,32 @@ public class ControllerManagement {
     }
 
     public boolean deleteDecoration(int decorationId) {
-        try {
-            return decorationService.deleteDecoration(decorationId);
-        } catch (DataAccessException e) {
-            System.err.println("Error al eliminar la decoración: " + e.getMessage());
-            return false;
+        boolean success = decorationService.deleteDecoration(decorationId);
+        if (success) {
+            System.out.println("Decoración eliminada correctamente.");
+        } else {
+            System.err.println("Error al eliminar la decoración.");
         }
+        return success;
+    }
+
+    // !Métodos para gestionar pistas (Hint)
+    public void addHint(int roomId, String description, double price) {
+        try {
+            hintService.addHint(roomId, description, price);
+            System.out.println("Pista agregada correctamente.");
+        } catch (DataAccessException e) {
+            System.err.println("Error al agregar la pista: " + e.getMessage());
+        }
+    }
+
+    public boolean deleteHint(int hintId) {
+        boolean success = hintService.deleteHint(hintId);
+        if (success) {
+            System.out.println("Pista eliminada correctamente.");
+        } else {
+            System.err.println("Error al eliminar la pista.");
+        }
+        return success;
     }
 }

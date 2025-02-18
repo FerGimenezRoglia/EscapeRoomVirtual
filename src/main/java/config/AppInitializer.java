@@ -2,7 +2,9 @@ package config;
 
 import services.RoomService;
 import services.DecorationService;
-import controllers.ControllerManagement;
+import services.HintService;
+import controllers.ManagementController;
+import controllers.InitializationController; // Importamos InitializationController
 import java.sql.Connection;
 
 public class AppInitializer {
@@ -10,18 +12,30 @@ public class AppInitializer {
     private Connection connection;
     private RoomService roomService;
     private DecorationService decorationService;
-    private ControllerManagement controllerManagement;
+    private HintService hintService;
+    private ManagementController managementController;
+    private InitializationController initializationController; // Nueva variable para InitializationController
 
     public AppInitializer() {
         dbConnection = DatabaseConnection.getInstance();
         connection = dbConnection.getConnection();
+
+        // Instanciar servicios
         roomService = new RoomService(connection);
         decorationService = new DecorationService(connection);
-        controllerManagement = new ControllerManagement(roomService, decorationService);
+        hintService = new HintService(connection);
+
+        // ✅ Instanciar controladores
+        managementController = new ManagementController(roomService, decorationService, hintService);
+        initializationController = new InitializationController(); // Se instancia correctamente
     }
 
-    public ControllerManagement getOperaciones() {
-        return controllerManagement;
+    public ManagementController getManagementController() {
+        return managementController;
+    }
+
+    public InitializationController getInitializationController() { //  Método para obtener InitializationController
+        return initializationController;
     }
 
     public void runScheme() {
