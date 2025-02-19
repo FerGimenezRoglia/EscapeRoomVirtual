@@ -1,6 +1,7 @@
 import config.AppInitializer;
 import controllers.InitializationController;
 import controllers.ManagementController;
+import controllers.TransactionController;
 import view.MenuManagement;
 
 public class Main {
@@ -14,9 +15,10 @@ public class Main {
         // Obtener los controladores desde AppInitializer
         InitializationController initializationController = initializer.getInitializationController();
         ManagementController managementController = initializer.getManagementController();
+        TransactionController transactionController = initializer.getTransactionController();
 
-        // Crear e iniciar el menú con ambos controladores
-        MenuManagement menu = new MenuManagement(initializationController, managementController);
+        // Crear e iniciar el menú con los controladores
+        MenuManagement menu = new MenuManagement(initializationController, managementController, transactionController);
         menu.showMenu();
 
         // Cerrar la conexión a la base de datos

@@ -4,11 +4,11 @@ import controllers.ManagementController;
 import exceptions.AppException;
 import java.util.Scanner;
 
-public class HintManagementView {
+public class HintManagement {
     private final ManagementController managementController;
     private final Scanner scanner;
 
-    public HintManagementView(ManagementController managementController) {
+    public HintManagement(ManagementController managementController) {
         this.managementController = managementController;
         this.scanner = new Scanner(System.in);
     }

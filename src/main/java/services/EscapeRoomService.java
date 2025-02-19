@@ -24,6 +24,7 @@ public class EscapeRoomService {
     private final DecorationRepository decorationRepository;
     private final Connection connection;
 
+    //No crea repositorios internamente, sino que los recibe como parámetros en el constructor.
     public EscapeRoomService(EscapeRoomRepository escapeRoomRepository, RoomRepository roomRepository, HintRepository hintRepository, DecorationRepository decorationRepository, Connection connection) {
         this.escapeRoomRepository = escapeRoomRepository;
         this.roomRepository = roomRepository;

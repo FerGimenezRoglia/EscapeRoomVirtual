@@ -1,12 +1,14 @@
 package view;
 
 import controllers.InitializationController;
-import exceptions.AppException;
 import controllers.ManagementController;
+import controllers.TransactionController;
+import exceptions.AppException;
 
 import view.management.RoomManagement;
 import view.management.DecorationManagement;
-import view.management.HintManagementView;
+import view.management.HintManagement;
+import view.management.TicketManagement;
 
 import java.util.Scanner;
 
@@ -14,14 +16,16 @@ public class MenuManagement implements IMenuGestion {
     private final InitializationController initController;
     private final RoomManagement roomManagement;
     private final DecorationManagement decorationManagement;
-    private final HintManagementView hintManagementView;
+    private final HintManagement hintManagementView;
+    private final TicketManagement ticketManagement;
     private final Scanner scanner;
 
-    public MenuManagement(InitializationController initController, ManagementController managementController) {
+    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController) {
         this.initController = initController;
         this.roomManagement = new RoomManagement(managementController);
         this.decorationManagement = new DecorationManagement(managementController);
-        this.hintManagementView = new HintManagementView(managementController);
+        this.hintManagementView = new HintManagement(managementController);
+        this.ticketManagement = new TicketManagement(transactionController);
         this.scanner = new Scanner(System.in);
     }
 
@@ -33,9 +37,7 @@ public class MenuManagement implements IMenuGestion {
                 showMenuInit();
                 int option = getOption();
                 switch (option) {
-                    case 1 -> {
-                        initController.startEscapeRoomSetup();
-                    }
+                    case 1 -> initController.startEscapeRoomSetup();
                     case 2 -> showMenuManagement();
                     case 3 -> {
                         System.out.println("Gracias por participar!");
@@ -58,7 +60,6 @@ public class MenuManagement implements IMenuGestion {
         System.out.print("Elige una opción: ");
     }
 
-
     private void showMenuManagement() {
         boolean continuar = true;
         try {
@@ -69,6 +70,7 @@ public class MenuManagement implements IMenuGestion {
                     case 1 -> roomManagement.manageRooms();
                     case 2 -> decorationManagement.manageDecorations();
                     case 3 -> hintManagementView.manageHints();
+                    case 4 -> ticketManagement.manageTickets();
                     case 9 -> {
                         System.out.println("Volviendo...");
                         continuar = false;
@@ -86,6 +88,7 @@ public class MenuManagement implements IMenuGestion {
         System.out.println("1. Salas");
         System.out.println("2. Decoraciones");
         System.out.println("3. Pistas");
+        System.out.println("4. Tickets");
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }

@@ -41,7 +41,6 @@ public class ManagementController {
     public void addDecoration(int roomId, String name, String material, double price) {
         try {
             decorationService.addDecoration(roomId, name, material, price);
-            System.out.println("Decoración agregada correctamente.");
         } catch (DataAccessException e) {
             System.err.println("Error al agregar la decoración: " + e.getMessage());
         }
@@ -49,9 +48,7 @@ public class ManagementController {
 
     public boolean deleteDecoration(int decorationId) {
         boolean success = decorationService.deleteDecoration(decorationId);
-        if (success) {
-            System.out.println("Decoración eliminada correctamente.");
-        } else {
+        if (!success) {
             System.err.println("Error al eliminar la decoración.");
         }
         return success;
@@ -61,7 +58,6 @@ public class ManagementController {
     public void addHint(int roomId, String description, double price) {
         try {
             hintService.addHint(roomId, description, price);
-            System.out.println("Pista agregada correctamente.");
         } catch (DataAccessException e) {
             System.err.println("Error al agregar la pista: " + e.getMessage());
         }
@@ -69,11 +65,10 @@ public class ManagementController {
 
     public boolean deleteHint(int hintId) {
         boolean success = hintService.deleteHint(hintId);
-        if (success) {
-            System.out.println("Pista eliminada correctamente.");
-        } else {
+        if (!success) {
             System.err.println("Error al eliminar la pista.");
         }
         return success;
     }
+
 }
