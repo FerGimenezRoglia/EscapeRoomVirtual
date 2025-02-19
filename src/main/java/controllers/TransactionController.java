@@ -1,6 +1,7 @@
 package controllers;
 
 import services.TicketService;
+import services.ClientService;
 import models.Ticket;
 import exceptions.DataAccessException;
 
@@ -8,24 +9,32 @@ import java.util.List;
 
 public class TransactionController {
     private final TicketService ticketService;
+    private final ClientService clientService;
 
-    public TransactionController(TicketService ticketService) {
+    public TransactionController(TicketService ticketService, ClientService clientService) {
         this.ticketService = ticketService;
+        this.clientService = clientService;
     }
 
-    public void viewTickets() {
+    public String registerTicketSale(String name, String email, boolean isSubscribed, int roomId, double totalPrice) {
         try {
-            List<Ticket> tickets = ticketService.viewTickets();
-            if (tickets.isEmpty()) {
-                System.out.println("No hay tickets vendidos.");
-            } else {
-                System.out.println("\n===== LISTA DE TICKETS VENDIDOS =====");
-                for (Ticket ticket : tickets) {
-                    System.out.println(ticket);
-                }
-            }
+            // Obtener o crear el cliente directamente con `getOrCreateClient()`
+            int clientId = clientService.getOrCreateClient(name, email, isSubscribed);
+
+            // Registrar la venta del ticket con el `clientId`
+            Ticket newTicket = ticketService.registerSale(clientId, roomId, totalPrice);
+            return "Ticket vendido con éxito: " + newTicket;
+
         } catch (DataAccessException e) {
-            System.err.println("Error al recuperar los tickets: " + e.getMessage());
+            return "Error al registrar la venta del ticket: " + e.getMessage();
+        }
+    }
+
+    public List<Ticket> viewTickets() {
+        try {
+            return ticketService.viewTickets();
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error al recuperar los tickets: " + e.getMessage(), e);
         }
     }
 
@@ -33,7 +42,6 @@ public class TransactionController {
         try {
             return ticketService.deleteTicket(ticketId);
         } catch (DataAccessException e) {
-            System.err.println("Error al eliminar el ticket: " + e.getMessage());
             return false;
         }
     }

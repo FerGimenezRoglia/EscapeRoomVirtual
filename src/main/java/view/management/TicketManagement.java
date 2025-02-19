@@ -2,7 +2,9 @@ package view.management;
 
 import controllers.TransactionController;
 import exceptions.AppException;
+import models.Ticket;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class TicketManagement {
@@ -31,7 +33,7 @@ public class TicketManagement {
                     case 2 -> viewTickets();
                     case 3 -> deleteTicket();
                     case 4 -> {
-                        System.out.println("Volviendo al menú principal...");
+                        System.out.println("Volviendo...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -51,8 +53,8 @@ public class TicketManagement {
         System.out.print("Email del Cliente: ");
         String email = scanner.nextLine().trim();
 
-        System.out.print("¿El Cliente está suscrito? (true/false): ");
-        boolean isSubscribed = Boolean.parseBoolean(scanner.nextLine().trim());
+        // Obtener el estado de suscripción usando un método auxiliar
+        boolean isSubscribed = getSubscriptionStatus();
 
         int roomId;
         do {
@@ -76,9 +78,32 @@ public class TicketManagement {
         System.out.println("Venta de Ticket registrada correctamente.");
     }
 
+    // Método auxiliar para obtener el estado de suscripción
+    private boolean getSubscriptionStatus() {
+        while (true) {
+            System.out.print("¿El Cliente está suscrito? (sí/no): ");
+            String subscribedInput = scanner.nextLine().trim().toLowerCase();
+
+            if (subscribedInput.equals("sí") || subscribedInput.equals("si")) {
+                return true; // Retorna true si el usuario está suscrito
+            } else if (subscribedInput.equals("no")) {
+                return false; // Retorna false si el usuario no está suscrito
+            } else {
+                System.out.println("Error: Entrada inválida. Por favor, ingresa 'sí' o 'no'.");
+            }
+        }
+    }
+
     private void viewTickets() {
         System.out.println("\n===== LISTA DE TICKETS VENDIDOS =====");
-        transactionController.viewTickets();
+        List<Ticket> tickets = transactionController.viewTickets();
+        if (tickets.isEmpty()) {
+            System.out.println("No hay tickets vendidos.");
+        } else {
+            for (Ticket ticket : tickets) {
+                System.out.println(ticket); // Asegúrate de que Ticket tenga un método toString() bien implementado
+            }
+        }
     }
 
     private void deleteTicket() {

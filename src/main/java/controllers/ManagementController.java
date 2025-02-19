@@ -11,7 +11,6 @@ public class ManagementController {
     private final DecorationService decorationService;
     private final HintService hintService;
 
-    // Constructor recibe los servicios
     public ManagementController(RoomService roomService, DecorationService decorationService, HintService hintService) {
         this.roomService = roomService;
         this.decorationService = decorationService;

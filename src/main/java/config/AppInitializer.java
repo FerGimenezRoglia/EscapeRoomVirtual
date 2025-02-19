@@ -38,7 +38,7 @@ public class AppInitializer {
         // Instanciar controladores
         managementController = new ManagementController(roomService, decorationService, hintService);
         initializationController = new InitializationController();
-        transactionController = new TransactionController(ticketService);
+        transactionController = new TransactionController(ticketService, clientService);
     }
 
     public ManagementController getManagementController() {

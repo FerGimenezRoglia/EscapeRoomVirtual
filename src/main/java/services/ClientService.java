@@ -5,31 +5,37 @@ import models.Client;
 import exceptions.DataAccessException;
 
 import java.sql.Connection;
-import java.util.Optional;
+import java.util.List;
 
 public class ClientService {
     private final ClientRepository clientRepository;
 
     public ClientService(Connection connection) {
-        this.clientRepository = new ClientRepository(connection);
+        this.clientRepository = new ClientRepository(connection); // Crear ClientRepository con la Connection
     }
 
-    public int getClientIdByEmail(String email) throws DataAccessException {
-        Optional<Client> client = clientRepository.getAll()
-                .stream()
-                .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                .findFirst();
-
-        return client.map(Client::getId).orElse(-1);
+    // Obtener todos los clientes
+    public List<Client> getAllClients() throws DataAccessException {
+        return clientRepository.getAll();
     }
 
-    public int createClient(String name, String email, boolean isSubscribed) throws DataAccessException {
-        if (getClientIdByEmail(email) != -1) {
-            throw new DataAccessException("El email ya está registrado: " + email);
+    // Agregar un nuevo cliente y devolver su ID
+    public int addNewClient(String name, String email, boolean isSubscribed) throws DataAccessException {
+        Client newClient = new Client(name, email, isSubscribed);
+        clientRepository.add(newClient); // Se asigna el ID automáticamente
+        return newClient.getId();
+    }
+
+    // Obtener o crear un cliente según el nombre
+    public int getOrCreateClient(String name, String email, boolean isSubscribed) throws DataAccessException {
+        List<Client> clients = clientRepository.getAll();
+
+        for (Client client : clients) {
+            if (client.getName().equalsIgnoreCase(name)) {
+                return client.getId(); // Si existe, devolver su ID
+            }
         }
 
-        Client newClient = new Client(name, email, isSubscribed);
-        clientRepository.add(newClient);
-        return getClientIdByEmail(email); // Recupera el ID recién creado
+        return addNewClient(name, email, isSubscribed); // Si no existe, crearlo y devolver su ID
     }
 }
