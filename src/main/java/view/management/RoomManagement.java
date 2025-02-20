@@ -1,5 +1,6 @@
 package view.management;
 
+import config.AppInitializer;
 import models.Room;
 import exceptions.AppException;
 import controllers.ManagementController;
@@ -7,10 +8,12 @@ import java.util.Scanner;
 
 public class RoomManagement {
     private final ManagementController managementController;
+    private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public RoomManagement(ManagementController managementController) {
+    public RoomManagement(ManagementController managementController, AppInitializer appInitializer) {
         this.managementController = managementController;
+        this.appInitializer = appInitializer;
         this.scanner = new Scanner(System.in);
     }
 
@@ -75,6 +78,9 @@ public class RoomManagement {
 
         managementController.addRoom(escapeRoomId, name, difficulty.name(), price);
         System.out.println("Sala agregada correctamente.");
+
+        // 👁🔹👁️ Aquí agregamos la notificación al Observer
+        appInitializer.getEventNotifier().notifyObservers("Nueva sala creada: " + name);
     }
 
     private void deleteRoom() {
@@ -90,6 +96,9 @@ public class RoomManagement {
         boolean success = managementController.deleteRoom(roomId);
         if (success) {
             System.out.println("Sala eliminada con éxito.");
+
+            // 👁🔹👁️ Agregamos la notificación al Observer
+            appInitializer.getEventNotifier().notifyObservers("Sala eliminada: ID " + roomId);
         } else {
             System.out.println("No se pudo eliminar la sala.");
         }

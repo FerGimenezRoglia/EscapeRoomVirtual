@@ -1,5 +1,6 @@
 package view;
 
+import config.AppInitializer;
 import controllers.InitializationController;
 import controllers.ManagementController;
 import controllers.TransactionController;
@@ -18,13 +19,15 @@ public class MenuManagement implements IMenuGestion {
     private final DecorationManagement decorationManagement;
     private final HintManagement hintManagementView;
     private final TicketManagement ticketManagement;
+    private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController) {
+    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer) {
         this.initController = initController;
-        this.roomManagement = new RoomManagement(managementController);
-        this.decorationManagement = new DecorationManagement(managementController);
-        this.hintManagementView = new HintManagement(managementController);
+        this.appInitializer = appInitializer;
+        this.roomManagement = new RoomManagement(managementController, appInitializer);
+        this.decorationManagement = new DecorationManagement(managementController, appInitializer);
+        this.hintManagementView = new HintManagement(managementController, appInitializer);
         this.ticketManagement = new TicketManagement(transactionController);
         this.scanner = new Scanner(System.in);
     }

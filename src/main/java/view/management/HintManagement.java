@@ -1,15 +1,18 @@
 package view.management;
 
+import config.AppInitializer;
 import controllers.ManagementController;
 import exceptions.AppException;
 import java.util.Scanner;
 
 public class HintManagement {
     private final ManagementController managementController;
+    private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public HintManagement(ManagementController managementController) {
+    public HintManagement(ManagementController managementController, AppInitializer appInitializer) {
         this.managementController = managementController;
+        this.appInitializer = appInitializer;
         this.scanner = new Scanner(System.in);
     }
 
@@ -63,6 +66,10 @@ public class HintManagement {
 
         managementController.addHint(roomId, description, price);
         System.out.println("Pista agregada correctamente.");
+
+        // 👁🔹👁️ Agregamos la notificación al Observer
+        appInitializer.getEventNotifier().notifyObservers("Nueva pista agregada: " + description);
+
     }
 
     private void deleteHint() {
@@ -78,6 +85,10 @@ public class HintManagement {
         boolean success = managementController.deleteHint(hintId);
         if (success) {
             System.out.println("Pista eliminada con éxito.");
+
+            // 👁🔹👁️ Agregamos la notificación al Observer
+            appInitializer.getEventNotifier().notifyObservers("Pista eliminada: ID " + hintId);
+
         } else {
             System.out.println("No se pudo eliminar la pista.");
         }

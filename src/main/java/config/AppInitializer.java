@@ -1,5 +1,9 @@
 package config;
 
+import observer.ClientNotifier;
+import observer.EmailNotifier;
+import observer.EventNotifier;
+import observer.SMSNotifier;
 import services.RoomService;
 import services.DecorationService;
 import services.HintService;
@@ -24,6 +28,9 @@ public class AppInitializer {
     private final InitializationController initializationController;
     private final TransactionController transactionController;
 
+    private final ClientNotifier clientNotifier; // 👁🔹👁️
+    private final EventNotifier eventNotifier; // 👁🔹👁️
+
     public AppInitializer() {
         dbConnection = DatabaseConnection.getInstance();
         connection = dbConnection.getConnection();
@@ -35,11 +42,25 @@ public class AppInitializer {
         decorationService = new DecorationService(connection);
         hintService = new HintService(connection);
 
+        clientNotifier = new ClientNotifier(); // 👁🔹👁️
+        eventNotifier = new EventNotifier(); // 👁🔹👁️
+
+        clientNotifier.addObserver(new EmailNotifier()); // 👁🔹👁️
+        eventNotifier.addObserver(new SMSNotifier()); // 👁🔹👁️
+
         // Instanciar controladores
-        managementController = new ManagementController(roomService, decorationService, hintService);
+        managementController = new ManagementController(roomService, decorationService, hintService, eventNotifier);
         initializationController = new InitializationController();
-        transactionController = new TransactionController(ticketService, clientService);
+        transactionController = new TransactionController(ticketService, clientService, this);
     }
+
+    public ClientNotifier getClientNotifier() {
+        return clientNotifier;
+    } // 👁🔹👁️
+
+    public EventNotifier getEventNotifier() {
+        return eventNotifier;
+    } // 👁🔹👁️
 
     public ManagementController getManagementController() {
         return managementController;

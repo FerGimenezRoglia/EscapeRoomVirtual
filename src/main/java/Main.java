@@ -18,7 +18,12 @@ public class Main {
         TransactionController transactionController = initializer.getTransactionController();
 
         // Crear e iniciar el menú con los controladores
-        MenuManagement menu = new MenuManagement(initializationController, managementController, transactionController);
+        MenuManagement menu = new MenuManagement(
+                initializationController,
+                managementController,
+                transactionController,
+                initializer
+        );
         menu.showMenu();
 
         // Cerrar la conexión a la base de datos

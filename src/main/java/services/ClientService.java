@@ -38,4 +38,10 @@ public class ClientService {
 
         return addNewClient(name, email, isSubscribed); // Si no existe, crearlo y devolver su ID
     }
+
+    // 👁🔹👁️ NUEVO metodo para el Observer
+    public Client getClientById(int clientId) throws DataAccessException {
+        return clientRepository.getById(clientId);
+    }
+
 }

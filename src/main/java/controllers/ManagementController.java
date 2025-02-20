@@ -1,5 +1,6 @@
 package controllers;
 
+import observer.EventNotifier;
 import services.RoomService;
 import services.DecorationService;
 import services.HintService;
@@ -10,11 +11,13 @@ public class ManagementController {
     private final RoomService roomService;
     private final DecorationService decorationService;
     private final HintService hintService;
+    private final EventNotifier eventNotifier; // 👁🔹👁️
 
-    public ManagementController(RoomService roomService, DecorationService decorationService, HintService hintService) {
+    public ManagementController(RoomService roomService, DecorationService decorationService, HintService hintService, EventNotifier eventNotifier) {
         this.roomService = roomService;
         this.decorationService = decorationService;
         this.hintService = hintService;
+        this.eventNotifier = eventNotifier; // 👁🔹👁️ Guardamos el notifier en la clase
     }
 
     // !Métodos para gestionar salas

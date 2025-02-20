@@ -1,15 +1,18 @@
 package view.management;
 
+import config.AppInitializer;
 import controllers.ManagementController;
 import exceptions.AppException;
 import java.util.Scanner;
 
 public class DecorationManagement {
     private final ManagementController managementController;
+    private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public DecorationManagement(ManagementController managementController) {
+    public DecorationManagement(ManagementController managementController, AppInitializer appInitializer) {
         this.managementController = managementController;
+        this.appInitializer = appInitializer;
         this.scanner = new Scanner(System.in);
     }
 
@@ -66,6 +69,10 @@ public class DecorationManagement {
 
         managementController.addDecoration(roomId, name, material, price);
         System.out.println("Decoración agregada correctamente.");
+
+        // 👁🔹👁️ Agregamos la notificación al Observer
+        appInitializer.getEventNotifier().notifyObservers("Nueva decoración agregada: " + name);
+
     }
 
     private void deleteDecoration() {
@@ -81,6 +88,10 @@ public class DecorationManagement {
         boolean success = managementController.deleteDecoration(decorationId);
         if (success) {
             System.out.println("Decoración eliminada con éxito.");
+
+            // 👁🔹👁️ Agregamos la notificación al Observer
+            appInitializer.getEventNotifier().notifyObservers("Decoración eliminada: ID " + decorationId);
+
         } else {
             System.out.println("No se pudo eliminar la decoración.");
         }
