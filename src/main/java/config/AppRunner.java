@@ -14,7 +14,8 @@ public class AppRunner {
                 initializer.getManagementController(),
                 initializer.getTransactionController(),
                 initializer,
-                initializer.getUserController()
+                initializer.getUserController(),
+                initializer.getInventoryService()
         );
     }
 
