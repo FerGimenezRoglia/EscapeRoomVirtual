@@ -2,6 +2,7 @@ import config.AppInitializer;
 import controllers.InitializationController;
 import controllers.ManagementController;
 import controllers.TransactionController;
+import controllers.UserController;
 import view.MenuManagement;
 
 public class Main {
@@ -16,13 +17,15 @@ public class Main {
         InitializationController initializationController = initializer.getInitializationController();
         ManagementController managementController = initializer.getManagementController();
         TransactionController transactionController = initializer.getTransactionController();
+        UserController userController = initializer.getUserController();
 
         // Crear e iniciar el menú con los controladores
         MenuManagement menu = new MenuManagement(
                 initializationController,
                 managementController,
                 transactionController,
-                initializer
+                initializer,
+                userController
         );
         menu.showMenu();
 

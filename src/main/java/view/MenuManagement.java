@@ -4,12 +4,14 @@ import config.AppInitializer;
 import controllers.InitializationController;
 import controllers.ManagementController;
 import controllers.TransactionController;
+import controllers.UserController;  // 📄
 import exceptions.AppException;
 
 import view.management.RoomManagement;
 import view.management.DecorationManagement;
 import view.management.HintManagement;
 import view.management.TicketManagement;
+import view.management.UserManagement; // 📄
 
 import java.util.Scanner;
 
@@ -19,16 +21,18 @@ public class MenuManagement implements IMenuGestion {
     private final DecorationManagement decorationManagement;
     private final HintManagement hintManagementView;
     private final TicketManagement ticketManagement;
+    private final UserManagement userManagement; // 📄
     private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer) {
+    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer, UserController userController) {
         this.initController = initController;
         this.appInitializer = appInitializer;
         this.roomManagement = new RoomManagement(managementController, appInitializer);
         this.decorationManagement = new DecorationManagement(managementController, appInitializer);
         this.hintManagementView = new HintManagement(managementController, appInitializer);
         this.ticketManagement = new TicketManagement(transactionController);
+        this.userManagement = new UserManagement(userController);
         this.scanner = new Scanner(System.in);
     }
 
@@ -74,6 +78,7 @@ public class MenuManagement implements IMenuGestion {
                     case 2 -> decorationManagement.manageDecorations();
                     case 3 -> hintManagementView.manageHints();
                     case 4 -> ticketManagement.manageTickets();
+                    case 5 -> userManagement.showMenu(); // 📄
                     case 9 -> {
                         System.out.println("Volviendo...");
                         continuar = false;
@@ -92,6 +97,7 @@ public class MenuManagement implements IMenuGestion {
         System.out.println("2. Decoraciones");
         System.out.println("3. Pistas");
         System.out.println("4. Tickets");
+        System.out.println("5. Usuarios");  // 📄
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }
