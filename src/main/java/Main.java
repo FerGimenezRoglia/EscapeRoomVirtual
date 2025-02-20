@@ -1,8 +1,6 @@
 import config.AppInitializer;
-import controllers.InitializationController;
-import controllers.ManagementController;
-import controllers.TransactionController;
-import controllers.UserController;
+import controllers.*;
+import services.InventoryService;
 import view.MenuManagement;
 
 public class Main {
@@ -17,7 +15,8 @@ public class Main {
         InitializationController initializationController = initializer.getInitializationController();
         ManagementController managementController = initializer.getManagementController();
         TransactionController transactionController = initializer.getTransactionController();
-        UserController userController = initializer.getUserController();
+        UserController userController = initializer.getUserController(); // 📄
+        InventoryService inventoryService = initializer.getInventoryService(); // 📦
 
         // Crear e iniciar el menú con los controladores
         MenuManagement menu = new MenuManagement(
@@ -25,7 +24,8 @@ public class Main {
                 managementController,
                 transactionController,
                 initializer,
-                userController
+                userController,
+                inventoryService
         );
         menu.showMenu();
 
