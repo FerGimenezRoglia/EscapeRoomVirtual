@@ -83,6 +83,10 @@ public class AppInitializer {
         return inventoryService;
     } // 📦
 
+    public ClientService getClientService() {
+        return clientService;
+    }
+
     public void runScheme() {
         dbConnection.ejecutarSchema();
     }

@@ -7,6 +7,7 @@ import controllers.TransactionController;
 import controllers.UserController;  // 📄
 import exceptions.AppException;
 
+import models.*;
 import services.InventoryService;
 import view.management.RoomManagement;
 import view.management.DecorationManagement;
@@ -14,6 +15,7 @@ import view.management.HintManagement;
 import view.management.TicketManagement;
 import view.management.UserManagement; // 📄
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuManagement implements IMenuGestion {
@@ -71,6 +73,9 @@ public class MenuManagement implements IMenuGestion {
     }
 
     private void showMenuManagement() {
+
+        mostrarResumenAdmin(); // Fer: resumen actualizado para gestionar App
+
         boolean continuar = true;
         try {
             while (continuar) {
@@ -113,5 +118,58 @@ public class MenuManagement implements IMenuGestion {
         } catch (NumberFormatException e) {
             throw new AppException("Error: Ingresa un número válido.", e);
         }
+    }
+
+    private void mostrarResumenAdmin() {
+        System.out.println("\n=====================================");
+
+        // 📌 Mostrar Clientes
+        List<Client> clients = appInitializer.getClientService().getAllClients();
+        System.out.println("\n🔘 CLIENTES REGISTRADOS:");
+        if (clients.isEmpty()) {
+            System.out.println("   No hay clientes registrados.");
+        } else {
+            clients.forEach(c -> System.out.println("   ID: " + c.getId() + " | " + c.getName()));
+        }
+        System.out.println("_____________________________________");
+
+        // 📌 Mostrar Tickets
+        List<Ticket> tickets = appInitializer.getTransactionController().viewTickets();
+        System.out.println("\n🔘 TICKETS VENDIDOS:");
+        if (tickets.isEmpty()) {
+            System.out.println("   No hay tickets vendidos.");
+        } else {
+            tickets.forEach(t -> System.out.println("   ID: " + t.getId() + " | Cliente ID: " + t.getClientId() + " | Sala ID: " + t.getRoomId() + " | 💰 Precio: " + t.getTotalPrice() + "€"));
+        }
+        System.out.println("_____________________________________");
+
+        // 📌 Mostrar Inventario Resumido
+        System.out.println("\n🔘 SALAS:");
+        List<Room> rooms = appInitializer.getInventoryService().getAllRooms();
+        if (rooms.isEmpty()) {
+            System.out.println("   No hay salas registradas.");
+        } else {
+            rooms.forEach(r -> System.out.println("   ID: " + r.getId() + " | " + r.getName()));
+        }
+        System.out.println("_____________________________________");
+
+        System.out.println("\n🔘 PISTAS:");
+        List<Hint> hints = appInitializer.getInventoryService().getAllHints();
+        if (hints.isEmpty()) {
+            System.out.println("   No hay pistas registradas.");
+        } else {
+            hints.forEach(h -> System.out.println("   ID: " + h.getId() + " | " + h.getDescription()));
+        }
+        System.out.println("_____________________________________");
+
+        System.out.println("\n🔘 DECORACIONES:");
+        List<Decoration> decorations = appInitializer.getInventoryService().getAllDecorations();
+        if (decorations.isEmpty()) {
+            System.out.println("   No hay decoraciones registradas.");
+        } else {
+            decorations.forEach(d -> System.out.println("   ID: " + d.getId() + " | " + d.getName()));
+        }
+
+        System.out.println("\n=====================================");
     }
 }

@@ -47,4 +47,17 @@ public class InventoryService {
         System.out.println("🎭 Total de Decoraciones: " + decorations.size());
         System.out.println("💰 Valor Total del Inventario: " + totalPrice + "€");
     }
+
+    public List<Room> getAllRooms() throws DataAccessException {
+        return roomRepository.getAll();
+    }
+
+    public List<Hint> getAllHints() throws DataAccessException {
+        return hintRepository.getAll();
+    }
+
+    public List<Decoration> getAllDecorations() throws DataAccessException {
+        return decorationRepository.getAll();
+    }
+
 }
