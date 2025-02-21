@@ -77,9 +77,8 @@ public class RoomManagement {
         } while (price == -1);
 
         managementController.addRoom(escapeRoomId, name, difficulty.name(), price);
-        System.out.println("Sala agregada correctamente.");
+        System.out.println("\n✅Sala agregada correctamente.");
 
-        // 👁🔹👁️ Aquí agregamos la notificación al Observer
         appInitializer.getEventNotifier().notifyObservers("Nueva sala creada: " + name);
     }
 
@@ -95,10 +94,10 @@ public class RoomManagement {
 
         boolean success = managementController.deleteRoom(roomId);
         if (success) {
-            System.out.println("Sala eliminada con éxito.");
+            System.out.println("\n✅Sala eliminada con éxito.");
             appInitializer.getEventNotifier().notifyObservers("Sala eliminada: ID " + roomId);
         } else {
-            System.out.println("No se pudo eliminar la sala.");
+            System.out.println("\n❌No se pudo eliminar la sala.");
         }
     }
 

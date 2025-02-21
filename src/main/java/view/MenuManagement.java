@@ -52,7 +52,7 @@ public class MenuManagement implements IMenuGestion {
                     case 1 -> initController.startEscapeRoomSetup();
                     case 2 -> showMenuManagement();
                     case 3 -> {
-                        System.out.println("Gracias por participar!");
+                        System.out.println("\nGRACIAS POR PARTICIPAR\n");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -89,7 +89,7 @@ public class MenuManagement implements IMenuGestion {
                     case 5 -> userManagement.showMenu();
                     case 6 -> inventoryService.showInventory();
                     case 7 -> {
-                        System.out.println("Volviendo al menú principal...");
+                        System.out.println("\nVolviendo al menú principal...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");

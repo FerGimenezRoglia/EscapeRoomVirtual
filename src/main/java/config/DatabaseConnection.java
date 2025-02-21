@@ -35,7 +35,7 @@ public class DatabaseConnection {
 
             // Conectar a la base de datos específica
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            logger.info("Conexión exitosa a la base de datos.");
+            logger.info("\nConexión exitosa a la base de datos.");
 
         } catch (ClassNotFoundException | SQLException e) {
             logger.error("Error al conectar con la base de datos.", e);
@@ -60,7 +60,7 @@ public class DatabaseConnection {
             try {
                 if (!connection.isClosed()) {
                     connection.close();
-                    logger.info("Conexión cerrada correctamente.");
+                    logger.info("\nConexión cerrada correctamente.");
                 }
             } catch (SQLException e) {
                 logger.error("Error al cerrar la conexión.", e);

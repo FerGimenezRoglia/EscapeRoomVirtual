@@ -53,7 +53,6 @@ public class EscapeRoomService {
             stmt.execute("DELETE FROM escape_room");
             stmt.execute("ALTER TABLE escape_room AUTO_INCREMENT = 1");
 
-            logger.info("Base de datos limpia y reseteada.");
         } catch (Exception e) {
             logger.error("Error al resetear la base de datos: {}", e.getMessage(), e);
         }

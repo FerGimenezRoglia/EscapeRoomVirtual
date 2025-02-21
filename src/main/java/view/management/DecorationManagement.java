@@ -68,7 +68,7 @@ public class DecorationManagement {
         } while (price == -1);
 
         managementController.addDecoration(roomId, name, material, price);
-        System.out.println("Decoración agregada correctamente.");
+        System.out.println("\n✅Decoración agregada correctamente.");
 
         appInitializer.getEventNotifier().notifyObservers("Nueva decoración agregada: " + name);
     }
@@ -85,12 +85,12 @@ public class DecorationManagement {
 
         boolean success = managementController.deleteDecoration(decorationId);
         if (success) {
-            System.out.println("Decoración eliminada con éxito.");
+            System.out.println("\n✅Decoración eliminada con éxito.");
 
             appInitializer.getEventNotifier().notifyObservers("Decoración eliminada: ID " + decorationId);
 
         } else {
-            System.out.println("No se pudo eliminar la decoración.");
+            System.out.println("\n❌No se pudo eliminar la decoración.");
         }
     }
 

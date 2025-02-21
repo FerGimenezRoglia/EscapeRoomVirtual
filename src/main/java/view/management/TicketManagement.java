@@ -75,7 +75,7 @@ public class TicketManagement {
         } while (price == -1);
 
         transactionController.registerTicketSale(name, email, isSubscribed, roomId, price);
-        System.out.println("Venta de Ticket registrada correctamente.");
+        System.out.println("\n✅Venta de Ticket registrada correctamente.");
     }
 
     private boolean getSubscriptionStatus() {
@@ -125,9 +125,9 @@ public class TicketManagement {
 
         boolean success = transactionController.deleteTicket(ticketId);
         if (success) {
-            System.out.println("Ticket eliminado con éxito.");
+            System.out.println("\n✅Ticket eliminado con éxito.");
         } else {
-            System.out.println("No se pudo eliminar el Ticket.");
+            System.out.println("\n❌No se pudo eliminar el Ticket.");
         }
     }
 

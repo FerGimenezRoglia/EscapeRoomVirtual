@@ -65,7 +65,7 @@ public class HintManagement {
         } while (price == -1);
 
         managementController.addHint(roomId, description, price);
-        System.out.println("Pista agregada correctamente.");
+        System.out.println("\n✅ Pista agregada correctamente.");
 
         appInitializer.getEventNotifier().notifyObservers("Nueva pista agregada: " + description);
     }
@@ -82,10 +82,10 @@ public class HintManagement {
 
         boolean success = managementController.deleteHint(hintId);
         if (success) {
-            System.out.println("Pista eliminada con éxito.");
+            System.out.println("\n✅Pista eliminada con éxito.");
             appInitializer.getEventNotifier().notifyObservers("Pista eliminada: ID " + hintId);
         } else {
-            System.out.println("No se pudo eliminar la pista.");
+            System.out.println("\n❌No se pudo eliminar la pista.");
         }
     }
 

@@ -79,7 +79,7 @@ public class UserManagement {
                 int number = Integer.parseInt(scanner.nextLine().trim());
                 return number;
             } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese un número válido.");
+                System.out.println("\n❌Error: Ingrese un número válido.");
             }
         }
     }
