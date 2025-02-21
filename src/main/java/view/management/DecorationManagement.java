@@ -24,7 +24,7 @@ public class DecorationManagement {
                 System.out.println("1. Agregar Decoración");
                 System.out.println("2. Eliminar Decoración");
                 System.out.println("3. Volver");
-                System.out.print("Elige una opción: ");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {

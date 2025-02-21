@@ -24,8 +24,8 @@ public class TicketManagement {
                 System.out.println("1. Registrar Venta de Ticket");
                 System.out.println("2. Ver Tickets Vendidos");
                 System.out.println("3. Eliminar Ticket");
-                System.out.println("4. Volver al menú principal");
-                System.out.print("Elige una opción: ");
+                System.out.println("4. Volver");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {
@@ -33,7 +33,7 @@ public class TicketManagement {
                     case 2 -> viewTickets();
                     case 3 -> deleteTicket();
                     case 4 -> {
-                        System.out.println("Volviendo...");
+                        System.out.println("Volviendo al menú de gestión...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -78,16 +78,15 @@ public class TicketManagement {
         System.out.println("Venta de Ticket registrada correctamente.");
     }
 
-    // Método auxiliar para obtener el estado de suscripción
     private boolean getSubscriptionStatus() {
         while (true) {
             System.out.print("¿El Cliente está suscrito? (sí/no): ");
             String subscribedInput = scanner.nextLine().trim().toLowerCase();
 
             if (subscribedInput.equals("sí") || subscribedInput.equals("si")) {
-                return true; // Retorna true si el usuario está suscrito
+                return true;
             } else if (subscribedInput.equals("no")) {
-                return false; // Retorna false si el usuario no está suscrito
+                return false;
             } else {
                 System.out.println("Error: Entrada inválida. Por favor, ingresa 'sí' o 'no'.");
             }
@@ -97,19 +96,27 @@ public class TicketManagement {
     private void viewTickets() {
         System.out.println("\n===== LISTA DE TICKETS VENDIDOS =====");
         List<Ticket> tickets = transactionController.viewTickets();
+
         if (tickets.isEmpty()) {
             System.out.println("No hay tickets vendidos.");
         } else {
-            for (Ticket ticket : tickets) {
-                System.out.println(ticket); // Asegúrate de que Ticket tenga un método toString() bien implementado
-            }
+            tickets.forEach(ticket -> {
+                System.out.printf("\nTicket ID:       %d%n", ticket.getId());
+                System.out.printf("Cliente ID:      %d%n", ticket.getClientId());
+                System.out.printf("Sala ID:         %d%n", ticket.getRoomId());
+                System.out.printf("Precio Total:    %.2f€%n", ticket.getTotalPrice());
+                System.out.printf("Fecha de Compra: %s%n", ticket.getPurchaseDate());
+                System.out.println("----------------------------------------");
+            });
         }
     }
+
+
 
     private void deleteTicket() {
         int ticketId;
         do {
-            System.out.print("ID del Ticket a eliminar: ");
+            System.out.print("Ingrese el ID del Ticket a eliminar: ");
             ticketId = getOption();
             if (ticketId == -1) {
                 System.out.println("Error: ID de ticket inválido. Inténtalo de nuevo.");

@@ -24,7 +24,7 @@ public class HintManagement {
                 System.out.println("1. Agregar una pista");
                 System.out.println("2. Eliminar una pista");
                 System.out.println("3. Volver");
-                System.out.print("Elige una opción: ");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {

@@ -18,14 +18,14 @@ public class RoomManagement {
     }
 
     public void manageRooms() {
-        boolean continuar = true; // Variable de control en lugar de return
+        boolean continuar = true;
         try {
             while (continuar) {
                 System.out.println("\n===== GESTIÓN DE SALAS =====");
                 System.out.println("1. Agregar Sala");
                 System.out.println("2. Eliminar Sala");
                 System.out.println("3. Volver");
-                System.out.print("Elige una opción: ");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {

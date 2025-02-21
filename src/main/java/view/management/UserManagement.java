@@ -13,14 +13,13 @@ public class UserManagement {
     }
 
     public void showMenu() {
-
         boolean continuar = true;
         while (continuar) {
             System.out.println("\n===== GESTIÓN DE USUARIOS =====");
             System.out.println("1. Marcar sala como completada");
             System.out.println("2. Otorgar certificado");
             System.out.println("3. Entregar recompensa");
-            System.out.println("4. Volver al menú principal");
+            System.out.println("4. Volver");
             System.out.print("Seleccione una opción: ");
 
             String option = scanner.nextLine();
@@ -37,7 +36,7 @@ public class UserManagement {
                     break;
                 case "4":
                     continuar = false;
-                    break; // Faltaba el break
+                    break;
                 default:
                     System.out.println("Opción no válida. Intente de nuevo.");
             }
@@ -74,7 +73,6 @@ public class UserManagement {
         userController.giveReward(clientId, roomId);
     }
 
-    // ✅ Método para limpiar buffer correctamente
     private int getIntInput() {
         while (true) {
             try {
