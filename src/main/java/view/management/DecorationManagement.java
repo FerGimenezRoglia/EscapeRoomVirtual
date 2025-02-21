@@ -17,7 +17,7 @@ public class DecorationManagement {
     }
 
     public void manageDecorations() {
-        boolean continuar = true; // Variable de control en lugar de return
+        boolean continuar = true;
         try {
             while (continuar) {
                 System.out.println("\n===== GESTIÓN DE DECORACIONES =====");
@@ -31,8 +31,8 @@ public class DecorationManagement {
                     case 1 -> addDecoration();
                     case 2 -> deleteDecoration();
                     case 3 -> {
-                        System.out.println("Volviendo...");
-                        continuar = false; // Se cambia la variable para salir del bucle
+                        System.out.println("Volviendo al menú de gestión...");
+                        continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
                 }
@@ -70,9 +70,7 @@ public class DecorationManagement {
         managementController.addDecoration(roomId, name, material, price);
         System.out.println("Decoración agregada correctamente.");
 
-        // 👁🔹👁️ Agregamos la notificación al Observer
         appInitializer.getEventNotifier().notifyObservers("Nueva decoración agregada: " + name);
-
     }
 
     private void deleteDecoration() {
@@ -81,7 +79,7 @@ public class DecorationManagement {
             System.out.print("Ingrese el ID de la decoración a eliminar: ");
             decorationId = getOption();
             if (decorationId == -1) {
-                System.out.println("Error: ID inválido. Inténtalo de nuevo.");
+                System.out.println("Error: ID de la decoración inválido. Inténtalo de nuevo.");
             }
         } while (decorationId == -1);
 
@@ -89,7 +87,6 @@ public class DecorationManagement {
         if (success) {
             System.out.println("Decoración eliminada con éxito.");
 
-            // 👁🔹👁️ Agregamos la notificación al Observer
             appInitializer.getEventNotifier().notifyObservers("Decoración eliminada: ID " + decorationId);
 
         } else {

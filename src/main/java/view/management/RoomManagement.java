@@ -32,7 +32,7 @@ public class RoomManagement {
                     case 1 -> addRoom();
                     case 2 -> deleteRoom();
                     case 3 -> {
-                        System.out.println("Volviendo...");
+                        System.out.println("Volviendo al menú de gestión...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -96,8 +96,6 @@ public class RoomManagement {
         boolean success = managementController.deleteRoom(roomId);
         if (success) {
             System.out.println("Sala eliminada con éxito.");
-
-            // 👁🔹👁️ Agregamos la notificación al Observer
             appInitializer.getEventNotifier().notifyObservers("Sala eliminada: ID " + roomId);
         } else {
             System.out.println("No se pudo eliminar la sala.");

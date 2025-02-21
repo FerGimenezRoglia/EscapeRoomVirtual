@@ -17,7 +17,7 @@ public class DatabaseConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/escape_room_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "iFer313.";
+    private static final String PASSWORD = "admin";
 //    private static final String PASSWORD = "iFer313.";
 
     private DatabaseConnection() {
@@ -51,12 +51,10 @@ public class DatabaseConnection {
         return instance;
     }
 
-    // Obtener la conexión actual
     public Connection getConnection() {
         return connection;
     }
 
-    // Cerrar la conexión a la base de datos
     public void closeConnection() {
         if (connection != null) {
             try {
@@ -71,11 +69,9 @@ public class DatabaseConnection {
         }
     }
 
-    // Método para ejecutar el esquema SQL
     public void ejecutarSchema() {
         String schemaPath = "src/main/resources/DatabaseSchema.sql";
 
-        // Verificar si la conexión está activa
         try {
             if (connection == null || connection.isClosed()) {
                 throw new DataAccessException("No se puede ejecutar el esquema SQL porque la conexión está cerrada.");
@@ -87,40 +83,24 @@ public class DatabaseConnection {
         try (Statement stmt = connection.createStatement();
              BufferedReader reader = new BufferedReader(new FileReader(schemaPath))) {
 
-            // Asegurar que estamos en la base de datos correcta
             stmt.execute("USE escape_room_db");
 
-            // Leer y ejecutar el esquema SQL línea por línea
             StringBuilder sql = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
-                // Ignorar líneas vacías y comentarios
                 if (line.isEmpty() || line.startsWith("--")) {
                     continue;
                 }
 
-                // Construir la sentencia SQL
                 sql.append(line).append(" ");
 
-                // Ejecutar la sentencia cuando se encuentra un punto y coma
                 if (line.endsWith(";")) {
                     stmt.execute(sql.toString().trim());
-                    sql.setLength(0); // Reiniciar para la siguiente sentencia
+                    sql.setLength(0);
                 }
             }
-
-            // **Verificar si la columna price ya existe**
-            ResultSet rs = stmt.executeQuery("SHOW COLUMNS FROM hint LIKE 'price';");
-            if (!rs.next()) { // Si la columna no existe, se agrega
-                stmt.execute("ALTER TABLE hint ADD COLUMN price DOUBLE NOT NULL;");
-                logger.info("Columna 'price' agregada a la tabla 'hint'.");
-            } else {
-                logger.info("La columna 'price' ya existe en la tabla 'hint'. No es necesario modificarla.");
-            }
-
-            logger.info("Base de datos y esquema SQL ejecutados correctamente.");
         } catch (IOException | SQLException e) {
             throw new DataAccessException("Error al ejecutar el esquema SQL.", e);
         }
