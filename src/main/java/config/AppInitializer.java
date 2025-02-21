@@ -1,22 +1,12 @@
 package config;
 
-import observer.ClientNotifier; // 👁🔹👁️
-import observer.EmailNotifier; // 👁🔹👁️
-import observer.EventNotifier; // 👁🔹👁️
-import observer.SMSNotifier; // 👁🔹👁️
-import services.RoomService;
-import services.DecorationService;
-import services.HintService;
-import services.TicketService;
-import services.ClientService;
-import services.RoomClientService;  // 📄
-
-import controllers.ManagementController;
-import controllers.InitializationController;
-import controllers.TransactionController;
-import controllers.UserController;  // 📄
+import controllers.*;
+import observer.*; // 👁🔹👁️
+import repositories.DecorationRepository;
+import repositories.HintRepository;
+import repositories.RoomRepository;
+import services.*;
 import repositories.RoomClientRepository; // 📄
-
 import java.sql.Connection;
 
 public class AppInitializer {
@@ -28,11 +18,11 @@ public class AppInitializer {
     private final TicketService ticketService;
     private final ClientService clientService;
     private final RoomClientService roomClientService;  // 📄
+    private final InventoryService inventoryService; // 📦
     private final ManagementController managementController;
     private final InitializationController initializationController;
     private final TransactionController transactionController;
     private final UserController userController;  // 📄
-
     private final ClientNotifier clientNotifier; // 👁🔹👁️
     private final EventNotifier eventNotifier; // 👁🔹👁️
 
@@ -41,13 +31,16 @@ public class AppInitializer {
         connection = dbConnection.getConnection();
 
         // Instanciar servicios (cada uno maneja sus repositorios internamente)
-        clientService = new ClientService(connection);
         roomClientService = new RoomClientService(new RoomClientRepository(connection)); // 📄
+        clientService = new ClientService(connection);
         ticketService = new TicketService(connection, roomClientService);
         roomService = new RoomService(connection);
         decorationService = new DecorationService(connection);
         hintService = new HintService(connection);
-
+        inventoryService = new InventoryService( // 📦
+                new RoomRepository(connection),
+                new HintRepository(connection),
+                new DecorationRepository(connection));
 
         clientNotifier = new ClientNotifier(); // 👁🔹👁️
         eventNotifier = new EventNotifier(); // 👁🔹👁️
@@ -84,6 +77,14 @@ public class AppInitializer {
 
     public UserController getUserController() {  // 📄 Agregado
         return userController;
+    }
+
+    public InventoryService getInventoryService() {
+        return inventoryService;
+    } // 📦
+
+    public ClientService getClientService() {
+        return clientService;
     }
 
     public void runScheme() {

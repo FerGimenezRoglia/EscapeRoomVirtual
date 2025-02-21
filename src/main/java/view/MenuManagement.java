@@ -7,30 +7,35 @@ import controllers.TransactionController;
 import controllers.UserController;  // 📄
 import exceptions.AppException;
 
+import models.*;
+import services.InventoryService;
 import view.management.RoomManagement;
 import view.management.DecorationManagement;
 import view.management.HintManagement;
 import view.management.TicketManagement;
 import view.management.UserManagement; // 📄
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuManagement implements IMenuGestion {
     private final InitializationController initController;
     private final RoomManagement roomManagement;
     private final DecorationManagement decorationManagement;
-    private final HintManagement hintManagementView;
+    private final HintManagement hintManagement;
     private final TicketManagement ticketManagement;
     private final UserManagement userManagement; // 📄
+    private final InventoryService inventoryService; // 📦
     private final AppInitializer appInitializer;
     private final Scanner scanner;
 
-    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer, UserController userController) {
+    public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer, UserController userController, InventoryService inventoryService) {
         this.initController = initController;
         this.appInitializer = appInitializer;
+        this.inventoryService = inventoryService; // 📦
         this.roomManagement = new RoomManagement(managementController, appInitializer);
         this.decorationManagement = new DecorationManagement(managementController, appInitializer);
-        this.hintManagementView = new HintManagement(managementController, appInitializer);
+        this.hintManagement = new HintManagement(managementController, appInitializer);
         this.ticketManagement = new TicketManagement(transactionController);
         this.userManagement = new UserManagement(userController);
         this.scanner = new Scanner(System.in);
@@ -68,6 +73,9 @@ public class MenuManagement implements IMenuGestion {
     }
 
     private void showMenuManagement() {
+
+        mostrarResumenAdmin(); // Fer: resumen actualizado para gestionar App
+
         boolean continuar = true;
         try {
             while (continuar) {
@@ -76,9 +84,10 @@ public class MenuManagement implements IMenuGestion {
                 switch (option) {
                     case 1 -> roomManagement.manageRooms();
                     case 2 -> decorationManagement.manageDecorations();
-                    case 3 -> hintManagementView.manageHints();
+                    case 3 -> hintManagement.manageHints();
                     case 4 -> ticketManagement.manageTickets();
                     case 5 -> userManagement.showMenu(); // 📄
+                    case 6 -> inventoryService.showInventory(); // 📦
                     case 9 -> {
                         System.out.println("Volviendo...");
                         continuar = false;
@@ -98,6 +107,7 @@ public class MenuManagement implements IMenuGestion {
         System.out.println("3. Pistas");
         System.out.println("4. Tickets");
         System.out.println("5. Usuarios");  // 📄
+        System.out.println("6. Inventario"); // 📦
         System.out.println("9. Volver");
         System.out.print("Elige una opción: ");
     }
@@ -108,5 +118,58 @@ public class MenuManagement implements IMenuGestion {
         } catch (NumberFormatException e) {
             throw new AppException("Error: Ingresa un número válido.", e);
         }
+    }
+
+    private void mostrarResumenAdmin() {
+        System.out.println("\n=====================================");
+
+        // 📌 Mostrar Clientes
+        List<Client> clients = appInitializer.getClientService().getAllClients();
+        System.out.println("\n🔘 CLIENTES REGISTRADOS:");
+        if (clients.isEmpty()) {
+            System.out.println("   No hay clientes registrados.");
+        } else {
+            clients.forEach(c -> System.out.println("   ID: " + c.getId() + " | " + c.getName()));
+        }
+        System.out.println("_____________________________________");
+
+        // 📌 Mostrar Tickets
+        List<Ticket> tickets = appInitializer.getTransactionController().viewTickets();
+        System.out.println("\n🔘 TICKETS VENDIDOS:");
+        if (tickets.isEmpty()) {
+            System.out.println("   No hay tickets vendidos.");
+        } else {
+            tickets.forEach(t -> System.out.println("   ID: " + t.getId() + " | Cliente ID: " + t.getClientId() + " | Sala ID: " + t.getRoomId() + " | 💰 Precio: " + t.getTotalPrice() + "€"));
+        }
+        System.out.println("_____________________________________");
+
+        // 📌 Mostrar Inventario Resumido
+        System.out.println("\n🔘 SALAS:");
+        List<Room> rooms = appInitializer.getInventoryService().getAllRooms();
+        if (rooms.isEmpty()) {
+            System.out.println("   No hay salas registradas.");
+        } else {
+            rooms.forEach(r -> System.out.println("   ID: " + r.getId() + " | " + r.getName()));
+        }
+        System.out.println("_____________________________________");
+
+        System.out.println("\n🔘 PISTAS:");
+        List<Hint> hints = appInitializer.getInventoryService().getAllHints();
+        if (hints.isEmpty()) {
+            System.out.println("   No hay pistas registradas.");
+        } else {
+            hints.forEach(h -> System.out.println("   ID: " + h.getId() + " | " + h.getDescription()));
+        }
+        System.out.println("_____________________________________");
+
+        System.out.println("\n🔘 DECORACIONES:");
+        List<Decoration> decorations = appInitializer.getInventoryService().getAllDecorations();
+        if (decorations.isEmpty()) {
+            System.out.println("   No hay decoraciones registradas.");
+        } else {
+            decorations.forEach(d -> System.out.println("   ID: " + d.getId() + " | " + d.getName()));
+        }
+
+        System.out.println("\n=====================================");
     }
 }

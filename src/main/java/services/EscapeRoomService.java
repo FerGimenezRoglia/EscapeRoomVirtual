@@ -79,7 +79,7 @@ public class EscapeRoomService {
 
             logger.info("Inicializando...\n" +
                             "┌───────────────────────────────────────────────┐\n" +
-                            "│  * {}: Por defecto           │\n" +
+                            "│  + {}: Por defecto           │\n" +
                             "│  └── + Sala: {}              │\n" +
                             "│      ├── + Pista: {}  │\n" +
                             "│      └── + Decoración: {}         │\n" +
