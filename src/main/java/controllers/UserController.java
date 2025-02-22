@@ -13,7 +13,7 @@ public class UserController {
     public void markRoomAsCompleted(int clientId, int roomId) {
         try {
             roomClientService.markRoomAsCompleted(clientId, roomId);
-            System.out.println("☑️ La sala ha sido marcada como completada.");
+            System.out.println("\n☑️ La sala ha sido marcada como completada.");
         } catch (DataAccessException e) {
             System.err.println("Error: " + e.getMessage());
         }
