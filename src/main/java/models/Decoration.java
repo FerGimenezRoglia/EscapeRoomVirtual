@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Decoration {
 
     private int id;
-    private int roomId; // Relación con la tabla room
+    private int roomId;
     private String name;
     private String material;
     private double price;
@@ -13,7 +13,7 @@ public class Decoration {
 
     public Decoration() {}
 
-    // Constructor con todos los atributos
+
     public Decoration(int id, int roomId, String name, String material, double price, Timestamp createdAt) {
         this.id = id;
         this.roomId = roomId;
@@ -23,7 +23,6 @@ public class Decoration {
         this.createdAt = createdAt;
     }
 
-    // Constructor para nuevos registros (sin ID ni timestamps)
     public Decoration(int roomId, String name, String material, double price) {
         this.roomId = roomId;
         this.name = name;
@@ -31,15 +30,12 @@ public class Decoration {
         this.price = price;
     }
 
-    // Getters
     public int getId() { return id; }
     public int getRoomId() { return roomId; }
     public String getName() { return name; }
     public String getMaterial() { return material; }
     public double getPrice() { return price; }
     public Timestamp getCreatedAt() { return createdAt; }
-
-    // Setters
 
     public void setId(int id) {this.id = id;}
     public void setRoomId(int roomId) { this.roomId = roomId; }

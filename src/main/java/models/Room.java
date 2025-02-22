@@ -7,17 +7,15 @@ public class Room {
     public enum DifficultyLevel { EASY, MEDIUM, HARD }
 
     private int id;
-    private Integer escapeRoomId; // Puede ser null según la BD
+    private Integer escapeRoomId;
     private String name;
     private DifficultyLevel difficultyLevel;
     private double price;
-    private Timestamp createdAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
-    private Timestamp updatedAt; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
-    // Constructor vacío
     public Room() {}
 
-    // Constructor con todos los atributos
     public Room(int id, Integer escapeRoomId, String name, DifficultyLevel difficultyLevel, double price, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.escapeRoomId = escapeRoomId;
@@ -28,7 +26,6 @@ public class Room {
         this.updatedAt = updatedAt;
     }
 
-    // Constructor para nuevos registros (sin ID ni timestamps)
     public Room(Integer escapeRoomId, String name, DifficultyLevel difficultyLevel, double price) {
         this.escapeRoomId = escapeRoomId;
         this.name = name;
@@ -36,7 +33,6 @@ public class Room {
         this.price = price;
     }
 
-    // Getters
     public int getId() { return id; }
     public Integer getEscapeRoomId() { return escapeRoomId; }
     public String getName() { return name; }
@@ -45,7 +41,7 @@ public class Room {
     public Timestamp getCreatedAt() { return createdAt; }
     public Timestamp getUpdatedAt() { return updatedAt; }
 
-    // Setters
+
     public void setId(int id) { this.id = id; }
     public void setEscapeRoomId(Integer escapeRoomId) { this.escapeRoomId = escapeRoomId; }
     public void setName(String name) { this.name = name; }

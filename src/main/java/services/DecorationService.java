@@ -6,7 +6,6 @@ import exceptions.DataAccessException;
 import java.sql.Connection;
 
 public class DecorationService {
-    // Cada servicio crea su propio repositorio internamente, recibiendo Connection en el constructor.
     private final DecorationRepository decorationRepository;
     public DecorationService(Connection connection) {
         this.decorationRepository = new DecorationRepository(connection);
@@ -19,7 +18,6 @@ public class DecorationService {
         Decoration decoration = new Decoration(roomId, name, material, price);
         decorationRepository.add(decoration);
     }
-
 
     public boolean deleteDecoration(int decorationId) {
         try {

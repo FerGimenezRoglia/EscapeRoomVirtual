@@ -24,21 +24,17 @@ public class InventoryService {
     }
 
     public void showInventory() throws DataAccessException {
-        // 📌 Obtener fecha actual
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
 
-        // 📌 Obtener todos los datos sin tocar repositorios
         List<Room> rooms = roomRepository.getAll();
         List<Hint> hints = hintRepository.getAll();
         List<Decoration> decorations = decorationRepository.getAll();
 
-        // 📌 Calcular el precio total
         double totalRoomPrice = rooms.stream().mapToDouble(Room::getPrice).sum();
         double totalHintPrice = hints.stream().mapToDouble(Hint::getPrice).sum();
         double totalDecorationPrice = decorations.stream().mapToDouble(Decoration::getPrice).sum();
         double totalPrice = totalRoomPrice + totalHintPrice + totalDecorationPrice;
 
-        // 📌 Imprimir inventario
         System.out.println("\n📦 INVENTARIO DEL ESCAPE ROOM 📦");
         System.out.println("📅 Fecha: " + currentDate);
         System.out.println("---------------------------------");

@@ -25,7 +25,7 @@ public class RoomRepository implements Repository<Room> {
                 resultSet.getInt("id"),
                 resultSet.getInt("escape_room_id"),
                 resultSet.getString("name"),
-                Room.DifficultyLevel.valueOf(resultSet.getString("difficulty_level")), // Convertir String a Enum
+                Room.DifficultyLevel.valueOf(resultSet.getString("difficulty_level")),
                 resultSet.getDouble("price"),
                 resultSet.getTimestamp("created_at"),
                 resultSet.getTimestamp("updated_at")
@@ -37,7 +37,7 @@ public class RoomRepository implements Repository<Room> {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_ROOM, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, room.getEscapeRoomId());
             statement.setString(2, room.getName());
-            statement.setString(3, room.getDifficultyLevel().name()); // Convertir Enum a String
+            statement.setString(3, room.getDifficultyLevel().name());
             statement.setDouble(4, room.getPrice());
 
             if (statement.executeUpdate() == 0) {

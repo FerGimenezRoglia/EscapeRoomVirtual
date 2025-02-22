@@ -10,11 +10,11 @@ import java.util.List;
 
 public class TicketService {
     private final TicketRepository ticketRepository;
-    private final RoomClientService roomClientService; // 📄 NUEVO
+    private final RoomClientService roomClientService;
 
     public TicketService(Connection connection, RoomClientService roomClientService) {
         this.ticketRepository = new TicketRepository(connection);
-        this.roomClientService = roomClientService; // 📄
+        this.roomClientService = roomClientService;
     }
 
     public List<Ticket> viewTickets() throws DataAccessException {
@@ -32,10 +32,10 @@ public class TicketService {
 
     public Ticket registerSale(int clientId, int roomId, double totalPrice) throws DataAccessException {
         Ticket ticket = new Ticket(clientId, roomId, totalPrice);
-        ticket.setPurchaseDate(new Timestamp(System.currentTimeMillis())); // Se asigna manualmente la fecha
+        ticket.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
         ticketRepository.add(ticket);
 
-        roomClientService.markRoomAsStarted(clientId, roomId); // 📄
+        roomClientService.markRoomAsStarted(clientId, roomId);
 
         return ticket;
     }

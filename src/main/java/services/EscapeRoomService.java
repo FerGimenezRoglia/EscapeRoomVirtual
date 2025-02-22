@@ -24,7 +24,6 @@ public class EscapeRoomService {
     private final DecorationRepository decorationRepository;
     private final Connection connection;
 
-    //No crea repositorios internamente, sino que los recibe como parámetros en el constructor.
     public EscapeRoomService(EscapeRoomRepository escapeRoomRepository, RoomRepository roomRepository, HintRepository hintRepository, DecorationRepository decorationRepository, Connection connection) {
         this.escapeRoomRepository = escapeRoomRepository;
         this.roomRepository = roomRepository;
@@ -76,13 +75,15 @@ public class EscapeRoomService {
             Decoration decoration = new Decoration(room.getId(), "Cuadro Nublado", "Madera", 20.0);
             decorationRepository.add(decoration);
 
-            logger.info("Inicializando...\n" +
-                            "┌───────────────────────────────────────────────┐\n" +
-                            "│  + {}: Por defecto           │\n" +
-                            "│  └── + Sala: {}              │\n" +
-                            "│      ├── + Pista: {}  │\n" +
-                            "│      └── + Decoración: {}         │\n" +
-                            "└───────────────────────────────────────────────┘",
+            logger.info("""
+                            
+                            Inicializando...
+                            ┌───────────────────────────────────────────────┐
+                            │  + {}: Por defecto           │
+                            │  └── + Sala: {}              │
+                            │      ├── + Pista: {}  │
+                            │      └── + Decoración: {}         │
+                            └───────────────────────────────────────────────┘""",
                     escapeRoom.getName(),
                     room.getName(),
                     hint.getDescription(),

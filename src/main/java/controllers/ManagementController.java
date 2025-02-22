@@ -11,16 +11,15 @@ public class ManagementController {
     private final RoomService roomService;
     private final DecorationService decorationService;
     private final HintService hintService;
-    private final EventNotifier eventNotifier; // 👁🔹👁️
+    private final EventNotifier eventNotifier;
 
     public ManagementController(RoomService roomService, DecorationService decorationService, HintService hintService, EventNotifier eventNotifier) {
         this.roomService = roomService;
         this.decorationService = decorationService;
         this.hintService = hintService;
-        this.eventNotifier = eventNotifier; // 👁🔹👁️ Guardamos el notifier en la clase
+        this.eventNotifier = eventNotifier;
     }
 
-    // !Métodos para gestionar salas
     public void addRoom(int escapeRoomId, String name, String difficulty, double price) {
         try {
             Room.DifficultyLevel difficultyLevel = Room.DifficultyLevel.valueOf(difficulty);
@@ -39,7 +38,6 @@ public class ManagementController {
         }
     }
 
-    // !Métodos para gestionar decoraciones
     public void addDecoration(int roomId, String name, String material, double price) {
         try {
             decorationService.addDecoration(roomId, name, material, price);
@@ -56,7 +54,6 @@ public class ManagementController {
         return success;
     }
 
-    // !Métodos para gestionar pistas (Hint)
     public void addHint(int roomId, String description, double price) {
         try {
             hintService.addHint(roomId, description, price);

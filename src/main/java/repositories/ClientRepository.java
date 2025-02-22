@@ -9,7 +9,6 @@ import java.util.List;
 public class ClientRepository implements Repository<Client> {
     private final Connection connection;
 
-    // 🔹 Definir las consultas SQL como constantes
     private static final String INSERT_CLIENT = "INSERT INTO client (name, email, is_subscribed) VALUES (?, ?, ?)";
     private static final String SELECT_CLIENT_BY_ID = "SELECT * FROM client WHERE id = ?";
     private static final String SELECT_ALL_CLIENTS = "SELECT * FROM client";
@@ -31,7 +30,6 @@ public class ClientRepository implements Repository<Client> {
         );
     }
 
-    // --------------------- CREATE ---------------------
     @Override
     public void add(Client client) throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_CLIENT, Statement.RETURN_GENERATED_KEYS)) {
@@ -55,7 +53,6 @@ public class ClientRepository implements Repository<Client> {
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public Client getById(int id) throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CLIENT_BY_ID)) {
@@ -73,7 +70,6 @@ public class ClientRepository implements Repository<Client> {
         }
     }
 
-    // --------------------- READ ---------------------
     @Override
     public List<Client> getAll() throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_CLIENTS);
@@ -91,7 +87,6 @@ public class ClientRepository implements Repository<Client> {
         }
     }
 
-    // --------------------- UPDATE ---------------------
     @Override
     public void update(Client client) throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_CLIENT)) {
@@ -108,7 +103,6 @@ public class ClientRepository implements Repository<Client> {
         }
     }
 
-    // --------------------- DELETE ---------------------
     @Override
     public void delete(int id) throws DataAccessException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_CLIENT)) {

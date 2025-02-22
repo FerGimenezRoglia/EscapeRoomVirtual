@@ -22,18 +22,14 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {
         try {
-            // Cargar el driver de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Conectar primero sin base de datos
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/?user=" + USER + "&password=" + PASSWORD);
 
-            // Crear la base de datos si no existe
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("CREATE DATABASE IF NOT EXISTS escape_room_db");
             }
 
-            // Conectar a la base de datos específica
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             logger.info("\nConexión exitosa a la base de datos.");
 
@@ -43,7 +39,6 @@ public class DatabaseConnection {
         }
     }
 
-    // Método para obtener la instancia única (Singleton)
     public static synchronized DatabaseConnection getInstance() {
         if (instance == null) {
             instance = new DatabaseConnection();

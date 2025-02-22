@@ -6,5 +6,4 @@ public class EventNotifier extends Subject{
         String message = "📢 Evento importante: " + eventType + " → " + entityName;
         notifyObservers(message);
     }
-
 }
