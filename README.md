@@ -32,7 +32,7 @@ Escape Room Virtual es una aplicación basada en consola que permite gestionar u
 ## 🛠️ Instalación
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/usuario/escape-room-virtual.git
+   git clone https://github.com/FerGimenezRoglia/EscapeRoomVirtual
 
 ## 📊 Presentación del proyecto
 Para más detalles, consulta la presentación completa en [Gamma AI](https://escape-room-virtual--98xyued.gamma.site/).
