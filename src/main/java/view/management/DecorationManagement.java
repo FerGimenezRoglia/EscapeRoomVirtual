@@ -17,22 +17,22 @@ public class DecorationManagement {
     }
 
     public void manageDecorations() {
-        boolean continuar = true; // Variable de control en lugar de return
+        boolean continuar = true;
         try {
             while (continuar) {
                 System.out.println("\n===== GESTIÓN DE DECORACIONES =====");
                 System.out.println("1. Agregar Decoración");
                 System.out.println("2. Eliminar Decoración");
                 System.out.println("3. Volver");
-                System.out.print("Elige una opción: ");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {
                     case 1 -> addDecoration();
                     case 2 -> deleteDecoration();
                     case 3 -> {
-                        System.out.println("Volviendo...");
-                        continuar = false; // Se cambia la variable para salir del bucle
+                        System.out.println("Volviendo al menú de gestión...");
+                        continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
                 }
@@ -68,11 +68,9 @@ public class DecorationManagement {
         } while (price == -1);
 
         managementController.addDecoration(roomId, name, material, price);
-        System.out.println("Decoración agregada correctamente.");
+        System.out.println("\n✅Decoración agregada correctamente.");
 
-        // 👁🔹👁️ Agregamos la notificación al Observer
         appInitializer.getEventNotifier().notifyObservers("Nueva decoración agregada: " + name);
-
     }
 
     private void deleteDecoration() {
@@ -81,19 +79,18 @@ public class DecorationManagement {
             System.out.print("Ingrese el ID de la decoración a eliminar: ");
             decorationId = getOption();
             if (decorationId == -1) {
-                System.out.println("Error: ID inválido. Inténtalo de nuevo.");
+                System.out.println("Error: ID de la decoración inválido. Inténtalo de nuevo.");
             }
         } while (decorationId == -1);
 
         boolean success = managementController.deleteDecoration(decorationId);
         if (success) {
-            System.out.println("Decoración eliminada con éxito.");
+            System.out.println("\n✅Decoración eliminada con éxito.");
 
-            // 👁🔹👁️ Agregamos la notificación al Observer
             appInitializer.getEventNotifier().notifyObservers("Decoración eliminada: ID " + decorationId);
 
         } else {
-            System.out.println("No se pudo eliminar la decoración.");
+            System.out.println("\n❌No se pudo eliminar la decoración.");
         }
     }
 

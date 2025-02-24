@@ -20,7 +20,6 @@ public class HintService {
         hintRepository.add(hint);
     }
 
-
     public boolean deleteHint(int hintId) {
         try {
             hintRepository.delete(hintId);
@@ -29,5 +28,4 @@ public class HintService {
             return false;
         }
     }
-
 }

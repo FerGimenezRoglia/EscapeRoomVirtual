@@ -7,7 +7,6 @@ public class AppRunner {
     private final MenuManagement menu;
 
     public AppRunner() {
-        // Inicializar configuración y controladores
         this.initializer = new AppInitializer();
         this.menu = new MenuManagement(
                 initializer.getInitializationController(),

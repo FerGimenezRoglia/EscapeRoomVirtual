@@ -6,8 +6,8 @@ public class ClientNotifier extends Subject {
 
     public void notifySubscriptionChange(Client client) {
         String message = client.isSubscribed()
-                ? "📩 Cliente " + client.getName() + " se ha SUSCRITO."
-                : "📩 Cliente " + client.getName() + " se ha DESUSCRITO.";
+                ? "📩 El Cliente " + client.getName() + " se ha SUSCRITO."
+                : "📩 El Cliente " + client.getName() + " se ha DESUSCRITO.";
 
         notifyObservers(message);
     }

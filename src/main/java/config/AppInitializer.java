@@ -1,7 +1,7 @@
 package config;
 
 import controllers.*;
-import observer.*; // 👁🔹👁️
+import observer.*;
 import repositories.DecorationRepository;
 import repositories.HintRepository;
 import repositories.RoomRepository;
@@ -17,51 +17,49 @@ public class AppInitializer {
     private final HintService hintService;
     private final TicketService ticketService;
     private final ClientService clientService;
-    private final RoomClientService roomClientService;  // 📄
-    private final InventoryService inventoryService; // 📦
+    private final RoomClientService roomClientService;
+    private final InventoryService inventoryService;
     private final ManagementController managementController;
     private final InitializationController initializationController;
     private final TransactionController transactionController;
-    private final UserController userController;  // 📄
-    private final ClientNotifier clientNotifier; // 👁🔹👁️
-    private final EventNotifier eventNotifier; // 👁🔹👁️
+    private final UserController userController;
+    private final ClientNotifier clientNotifier;
+    private final EventNotifier eventNotifier;
 
     public AppInitializer() {
         dbConnection = DatabaseConnection.getInstance();
         connection = dbConnection.getConnection();
 
-        // Instanciar servicios (cada uno maneja sus repositorios internamente)
-        roomClientService = new RoomClientService(new RoomClientRepository(connection)); // 📄
+        roomClientService = new RoomClientService(new RoomClientRepository(connection));
         clientService = new ClientService(connection);
         ticketService = new TicketService(connection, roomClientService);
         roomService = new RoomService(connection);
         decorationService = new DecorationService(connection);
         hintService = new HintService(connection);
-        inventoryService = new InventoryService( // 📦
+        inventoryService = new InventoryService(
                 new RoomRepository(connection),
                 new HintRepository(connection),
                 new DecorationRepository(connection));
 
-        clientNotifier = new ClientNotifier(); // 👁🔹👁️
-        eventNotifier = new EventNotifier(); // 👁🔹👁️
+        clientNotifier = new ClientNotifier();
+        eventNotifier = new EventNotifier();
 
-        clientNotifier.addObserver(new EmailNotifier()); // 👁🔹👁️
-        eventNotifier.addObserver(new SMSNotifier()); // 👁🔹👁️
+        clientNotifier.addObserver(new EmailNotifier());
+        eventNotifier.addObserver(new SMSNotifier());
 
-        // Instanciar controladores
         managementController = new ManagementController(roomService, decorationService, hintService, eventNotifier);
         initializationController = new InitializationController();
         transactionController = new TransactionController(ticketService, clientService, this);
-        userController = new UserController(roomClientService); // 📄
+        userController = new UserController(roomClientService);
     }
 
     public ClientNotifier getClientNotifier() {
         return clientNotifier;
-    } // 👁🔹👁️
+    }
 
     public EventNotifier getEventNotifier() {
         return eventNotifier;
-    } // 👁🔹👁️
+    }
 
     public ManagementController getManagementController() {
         return managementController;
@@ -81,7 +79,7 @@ public class AppInitializer {
 
     public InventoryService getInventoryService() {
         return inventoryService;
-    } // 📦
+    }
 
     public ClientService getClientService() {
         return clientService;

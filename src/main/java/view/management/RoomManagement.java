@@ -18,21 +18,21 @@ public class RoomManagement {
     }
 
     public void manageRooms() {
-        boolean continuar = true; // Variable de control en lugar de return
+        boolean continuar = true;
         try {
             while (continuar) {
                 System.out.println("\n===== GESTIÓN DE SALAS =====");
                 System.out.println("1. Agregar Sala");
                 System.out.println("2. Eliminar Sala");
                 System.out.println("3. Volver");
-                System.out.print("Elige una opción: ");
+                System.out.print("Seleccione una opción: ");
 
                 int option = getOption();
                 switch (option) {
                     case 1 -> addRoom();
                     case 2 -> deleteRoom();
                     case 3 -> {
-                        System.out.println("Volviendo...");
+                        System.out.println("Volviendo al menú de gestión...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -77,9 +77,8 @@ public class RoomManagement {
         } while (price == -1);
 
         managementController.addRoom(escapeRoomId, name, difficulty.name(), price);
-        System.out.println("Sala agregada correctamente.");
+        System.out.println("\n✅Sala agregada correctamente.");
 
-        // 👁🔹👁️ Aquí agregamos la notificación al Observer
         appInitializer.getEventNotifier().notifyObservers("Nueva sala creada: " + name);
     }
 
@@ -95,12 +94,10 @@ public class RoomManagement {
 
         boolean success = managementController.deleteRoom(roomId);
         if (success) {
-            System.out.println("Sala eliminada con éxito.");
-
-            // 👁🔹👁️ Agregamos la notificación al Observer
+            System.out.println("\n✅Sala eliminada con éxito.");
             appInitializer.getEventNotifier().notifyObservers("Sala eliminada: ID " + roomId);
         } else {
-            System.out.println("No se pudo eliminar la sala.");
+            System.out.println("\n❌No se pudo eliminar la sala.");
         }
     }
 

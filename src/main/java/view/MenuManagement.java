@@ -24,15 +24,15 @@ public class MenuManagement implements IMenuGestion {
     private final DecorationManagement decorationManagement;
     private final HintManagement hintManagement;
     private final TicketManagement ticketManagement;
-    private final UserManagement userManagement; // 📄
-    private final InventoryService inventoryService; // 📦
+    private final UserManagement userManagement;
+    private final InventoryService inventoryService;
     private final AppInitializer appInitializer;
     private final Scanner scanner;
 
     public MenuManagement(InitializationController initController, ManagementController managementController, TransactionController transactionController, AppInitializer appInitializer, UserController userController, InventoryService inventoryService) {
         this.initController = initController;
         this.appInitializer = appInitializer;
-        this.inventoryService = inventoryService; // 📦
+        this.inventoryService = inventoryService;
         this.roomManagement = new RoomManagement(managementController, appInitializer);
         this.decorationManagement = new DecorationManagement(managementController, appInitializer);
         this.hintManagement = new HintManagement(managementController, appInitializer);
@@ -52,7 +52,7 @@ public class MenuManagement implements IMenuGestion {
                     case 1 -> initController.startEscapeRoomSetup();
                     case 2 -> showMenuManagement();
                     case 3 -> {
-                        System.out.println("Gracias por participar!");
+                        System.out.println("\nGRACIAS POR PARTICIPAR\n");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -74,7 +74,7 @@ public class MenuManagement implements IMenuGestion {
 
     private void showMenuManagement() {
 
-        mostrarResumenAdmin(); // Fer: resumen actualizado para gestionar App
+        mostrarResumenAdmin();
 
         boolean continuar = true;
         try {
@@ -86,10 +86,10 @@ public class MenuManagement implements IMenuGestion {
                     case 2 -> decorationManagement.manageDecorations();
                     case 3 -> hintManagement.manageHints();
                     case 4 -> ticketManagement.manageTickets();
-                    case 5 -> userManagement.showMenu(); // 📄
-                    case 6 -> inventoryService.showInventory(); // 📦
-                    case 9 -> {
-                        System.out.println("Volviendo...");
+                    case 5 -> userManagement.showMenu();
+                    case 6 -> inventoryService.showInventory();
+                    case 7 -> {
+                        System.out.println("\nVolviendo al menú principal...");
                         continuar = false;
                     }
                     default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
@@ -106,9 +106,9 @@ public class MenuManagement implements IMenuGestion {
         System.out.println("2. Decoraciones");
         System.out.println("3. Pistas");
         System.out.println("4. Tickets");
-        System.out.println("5. Usuarios");  // 📄
-        System.out.println("6. Inventario"); // 📦
-        System.out.println("9. Volver");
+        System.out.println("5. Usuarios");
+        System.out.println("6. Inventario");
+        System.out.println("7. Volver al menú principal");
         System.out.print("Elige una opción: ");
     }
 
@@ -123,7 +123,6 @@ public class MenuManagement implements IMenuGestion {
     private void mostrarResumenAdmin() {
         System.out.println("\n=====================================");
 
-        // 📌 Mostrar Clientes
         List<Client> clients = appInitializer.getClientService().getAllClients();
         System.out.println("\n🔘 CLIENTES REGISTRADOS:");
         if (clients.isEmpty()) {
@@ -133,7 +132,6 @@ public class MenuManagement implements IMenuGestion {
         }
         System.out.println("_____________________________________");
 
-        // 📌 Mostrar Tickets
         List<Ticket> tickets = appInitializer.getTransactionController().viewTickets();
         System.out.println("\n🔘 TICKETS VENDIDOS:");
         if (tickets.isEmpty()) {
@@ -143,7 +141,6 @@ public class MenuManagement implements IMenuGestion {
         }
         System.out.println("_____________________________________");
 
-        // 📌 Mostrar Inventario Resumido
         System.out.println("\n🔘 SALAS:");
         List<Room> rooms = appInitializer.getInventoryService().getAllRooms();
         if (rooms.isEmpty()) {

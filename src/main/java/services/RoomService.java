@@ -26,7 +26,6 @@ public class RoomService {
         roomRepository.add(room);
     }
 
-
     public boolean deleteRoom(int roomId) throws DataAccessException {
         try {
             roomRepository.delete(roomId);

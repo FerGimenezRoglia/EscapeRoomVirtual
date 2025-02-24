@@ -6,14 +6,12 @@ public class RoomClient {
 
     private int clientId;
     private int roomId;
-    private Timestamp startTime; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
-    private Timestamp endTime; // Timestamp mejor opción en Java para manejar fechas y horas con precisión
+    private Timestamp startTime;
+    private Timestamp endTime;
     private boolean completed;
 
-    // Constructor vacío
     public RoomClient() {}
 
-    // Constructor con todos los atributos (para recuperar datos de la BD)
     public RoomClient(int clientId, int roomId, Timestamp startTime, Timestamp endTime, boolean completed) {
         this.clientId = clientId;
         this.roomId = roomId;
@@ -22,21 +20,17 @@ public class RoomClient {
         this.completed = completed;
     }
 
-    // Constructor para nuevos registros (sin timestamps ni endTime)
     public RoomClient(int clientId, int roomId) {
         this.clientId = clientId;
         this.roomId = roomId;
-        this.completed = false; // Por defecto, una reserva no está completada
+        this.completed = false;
     }
 
-    // Getters
     public int getClientId() { return clientId; }
     public int getRoomId() { return roomId; }
     public Timestamp getStartTime() { return startTime; }
     public Timestamp getEndTime() { return endTime; }
     public boolean isCompleted() { return completed; }
-
-    // Setters
 
     public void setClientId(int clientId) {this.clientId = clientId;}
     public void setRoomId(int roomId) {this.roomId = roomId;}

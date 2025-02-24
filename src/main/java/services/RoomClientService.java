@@ -12,7 +12,7 @@ public class RoomClientService {
         this.roomClientRepository = roomClientRepository;
     }
 
-    public void markRoomAsStarted(int clientId, int roomId) throws DataAccessException { // 📄
+    public void markRoomAsStarted(int clientId, int roomId) throws DataAccessException {
         RoomClient roomClient = new RoomClient(clientId, roomId);
         roomClient.setStartTime(new Timestamp(System.currentTimeMillis()));
         roomClientRepository.add(roomClient);
